@@ -6,6 +6,13 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
     Rigidbody2D rigid;
+    Animator anim;
+    SpriteRenderer spriteRenderer;
+
+    //private
+
+    float Hmove;
+    //public
     public float MoveSpeed;
     public float jumpPower;
 
@@ -13,30 +20,64 @@ public class CharacterController : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
+    private void FixedUpdate()
+    {
+        Hmove = Input.GetAxisRaw("Horizontal");
+        PlayerMove();
+    }
     // Update is called once per frame
     void Update()
     {
-        PlayerMove();
+        AnimationUpdate();
+        Debug.Log(anim.GetBool("isJump"));
     }
 
     void PlayerMove()
     {
-        if (Input.GetKey(KeyCode.RightArrow))
+        Vector3 movePosition = Vector3.zero;
+
+        if(Input.GetAxisRaw("Horizontal") > 0)
         {
-            transform.Translate(new Vector2(MoveSpeed * Time.deltaTime, 0));
+            movePosition = Vector3.right;
+            spriteRenderer.flipX = false;
+        }
+        else if (Input.GetAxisRaw("Horizontal") < 0)
+        {
+            movePosition = Vector3.left;
+            spriteRenderer.flipX = true;
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
+        transform.position += movePosition * MoveSpeed * Time.deltaTime;
+                
+        if (Input.GetKey(KeyCode.Space))
         {
-            transform.Translate(new Vector2(-MoveSpeed * Time.deltaTime, 0));
+            if (anim.GetBool("isJump") != true)
+            {
+                anim.SetBool("isJump", true);
+                rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            }
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Platform")
         {
-            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            anim.SetBool("isJump", false);
         }
+    }
+
+    void AnimationUpdate()
+    {
+        if(Hmove == 0)
+        {
+            anim.SetBool("isMove", false);
+        }
+        else anim.SetBool("isMove", true);
     }
 }
 
