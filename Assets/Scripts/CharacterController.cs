@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+// 다음 만들것 공격 모션, 대쉬 모션, 죽는 것, 체력
+// 본격적으로 벽을 만들어야함
+// 플랫폼도 수정하고 카메라 움직임과 스카이박스 움직임도 설정해야함.
 public class CharacterController : MonoBehaviour
 {
     Rigidbody2D rigid;
