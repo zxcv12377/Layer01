@@ -33,7 +33,6 @@ public class CharacterController : MonoBehaviour
     void Update()
     {
         AnimationUpdate();
-        Debug.Log(anim.GetBool("isJump"));
     }
 
     void PlayerMove()
