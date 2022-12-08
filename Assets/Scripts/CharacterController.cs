@@ -9,9 +9,10 @@ public class CharacterController : MonoBehaviour
     Animator anim;
     SpriteRenderer spriteRenderer;
 
+    float Hmove;
+
     //private
 
-    float Hmove;
     //public
     public float MoveSpeed;
     public float jumpPower;
