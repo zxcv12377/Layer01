@@ -2,42 +2,50 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 1. 다음 만들것 대쉬 모션, 죽는 것, 체력
+// 1. 다음 만들것 체력, 죽는 것
 // 2. 본격적으로 벽을 만들어야함
 // 3. 플랫폼도 수정하고 카메라 움직임과 스카이박스 움직임도 설정해야함.
 // (추가)
-// 4. 대쉬 움직임 수정하기 (해결)
+// 4. 대쉬 움직임 수정하기 (해결) 
 public class CharacterController : MonoBehaviour
 {
-    Rigidbody2D rigid;
-    Animator anim;
-    SpriteRenderer spriteRenderer;
+
+    private Rigidbody2D rb;
+    private Animator anim;
+    private SpriteRenderer sr;
+
     //TrailRenderer tr;
 
-    float Hmove;
+
 
     //private
+    //      Move
+    private float Hmove;
     private float MoveSpeed = 5f;
     [SerializeField] private float jumpPower = 25f;
-    private float DashPower = 10f;
-
+    //      Dash
     private bool canDash = true;
+    private float DashPower = 10f;
     private float DashTime = 0.2f;
     private float DashCooldown = 1f;
 
-    //public
     
-    public int maxHP;
-    public int currentHP;
+
+
+    //public
+    //      State
+    public float maxHP;
+    public float currentHP;
+    public float Dmage;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        rigid = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
     }
 
     private void FixedUpdate()
@@ -70,14 +78,14 @@ public class CharacterController : MonoBehaviour
         {
             return;
         }
-        AnimationUpdate();
+        animtionUpdate();
 
-        if(rigid.velocity.y < 0)
+        if(rb.velocity.y < 0)
         {
             anim.SetBool("isFalling", true);
         }
 
-        anim.SetFloat("yVelocity", rigid.velocity.y);
+        anim.SetFloat("yVelocity", rb.velocity.y);
     }
     
     // Move //
@@ -90,12 +98,12 @@ public class CharacterController : MonoBehaviour
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
                 movePosition = Vector3.right;
-                spriteRenderer.flipX = false;
+                sr.flipX = false;
             }
             else if (Input.GetAxisRaw("Horizontal") < 0)
             {
                 movePosition = Vector3.left;
-                spriteRenderer.flipX = true;
+                sr.flipX = true;
             }
         }
         
@@ -130,7 +138,7 @@ public class CharacterController : MonoBehaviour
         if (anim.GetBool("isJump") != true && anim.GetBool("isDash") != true)
         {
             anim.SetBool("isJump", true);
-            rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         }
     }
 
@@ -142,19 +150,19 @@ public class CharacterController : MonoBehaviour
         {
             canDash = false;
             anim.SetBool("isDash", true);
-            float OriginalGravity = rigid.gravityScale;
-            rigid.gravityScale = 0f;
-            rigid.velocity = new Vector2(transform.localScale.x * DashPower * Dir, 0f);
+            float OriginalGravity = rb.gravityScale;
+            rb.gravityScale = 0f;
+            rb.velocity = new Vector2(transform.localScale.x * DashPower * Dir, 0f);
             yield return new WaitForSeconds(DashTime);
-            rigid.gravityScale = OriginalGravity;
+            rb.gravityScale = OriginalGravity;
             anim.SetBool("isDash", false);
             yield return new WaitForSeconds(DashCooldown);
             canDash = true;
         }
     }
 
-    // Animation Control //
-    void AnimationUpdate()
+    // animtion Control // 
+    void animtionUpdate()
     {
         if (Hmove == 0)
         {
