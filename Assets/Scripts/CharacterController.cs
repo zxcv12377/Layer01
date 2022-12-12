@@ -120,7 +120,6 @@ public class CharacterController : MonoBehaviour
         {
             isGounded = true;
             isJump = false;
-            DoubleJump = false;
             anim.SetBool("isJump", false);
             anim.SetBool("isFalling", false);
         }
