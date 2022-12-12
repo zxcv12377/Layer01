@@ -110,11 +110,7 @@ public class CharacterController : MonoBehaviour
                 sr.flipX = true;
             }
         }
-        
-
         transform.position += movePosition * MoveSpeed * Time.deltaTime;
-                
-        
     }
 
     // Collision //
@@ -135,9 +131,7 @@ public class CharacterController : MonoBehaviour
     {
         if(collision.gameObject.tag == "Spike" || collision.gameObject.tag == "MainCamera")
         {
-            Debug.Log("hit");
             StartCoroutine(TakeHit(collision.transform.position));
-
         }
 
     }
@@ -160,11 +154,6 @@ public class CharacterController : MonoBehaviour
             isJump = true;
 
             anim.SetBool("isJump", true);
-            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        }
-        else if (!isGounded && !DoubleJump && Input.GetKey(KeyCode.C))
-        {
-            DoubleJump = true;
             rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         }
     }
