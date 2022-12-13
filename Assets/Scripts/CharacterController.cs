@@ -6,7 +6,7 @@ using UnityEngine;
 // 2. 본격적으로 벽을 만들어야함 (Enemy)
 // 3. 플랫폼도 수정
 // 4. 카메라 움직임 (해결)
-// 5. 스카이박스 움직임
+// 5. 스카이박스 움직임 (해결)
 // (추가)
 // 6. 대쉬 움직임 수정하기 (해결) 
 // 7. 인터페이스
@@ -16,7 +16,7 @@ public class CharacterController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private SpriteRenderer sr;
-    private BoxCollider2D boxCollider;
+    private CharacterController cc;
 
     //private
     //      Move
@@ -29,10 +29,9 @@ public class CharacterController : MonoBehaviour
     private float DashTime = 0.2f;
     private float DashCooldown = 0.5f;
     //      Jump
-    private bool isGounded = true;
+    private bool isGrounded = true;
     private bool isJump = false;
     private bool DoubleJump = false;
-
     
 
 
@@ -42,15 +41,13 @@ public class CharacterController : MonoBehaviour
     public float currentHP;
     public float Damage;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        cc = GetComponent<CharacterController>();
     }
 
     private void FixedUpdate()
@@ -59,21 +56,9 @@ public class CharacterController : MonoBehaviour
         {
             return;
         }
-
         Hmove = Input.GetAxisRaw("Horizontal");
         PlayerMove();
-        if (Input.GetKey(KeyCode.X))
-        {
-            Attack();
-        }
-        if (Input.GetKey(KeyCode.Z) && canDash)
-        {
-            StartCoroutine(Dash());
-        }
-        if (Input.GetKey(KeyCode.C))
-        {
-            Jump();
-        }
+
     }
     // Update is called once per frame
     void Update()
@@ -87,6 +72,21 @@ public class CharacterController : MonoBehaviour
         if(rb.velocity.y < 0)
         {
             anim.SetBool("isFalling", true);
+        }
+
+        if (Input.GetKey(KeyCode.X))
+        {
+            Attack();
+        }
+
+        if (Input.GetKey(KeyCode.Z) && canDash)
+        {
+            StartCoroutine(Dash());
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Jump();
         }
 
         anim.SetFloat("yVelocity", rb.velocity.y);
@@ -118,25 +118,29 @@ public class CharacterController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Platform")
         {
-            isGounded = true;
+            isGrounded = true;
             isJump = false;
+            DoubleJump = false;
             anim.SetBool("isJump", false);
             anim.SetBool("isFalling", false);
         }
-    }
-
-    // Trigger //
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.gameObject.tag == "Spike" || collision.gameObject.tag == "MainCamera")
+        if (collision.gameObject.tag == "Spike") //&& !isHit)
         {
             StartCoroutine(TakeHit(collision.transform.position));
         }
+        if (collision.gameObject.tag == "MainCamera")
+        {
 
+            StartCoroutine(Died(collision.transform.position));
+        }
+        if (collision.gameObject.tag == "Wall")
+        {
+            Debug.Log("Coll");
+        }
     }
 
     // Attack //
-    public void Attack()
+    private void Attack()
     {
         if (anim.GetBool("isAttack") != true && anim.GetBool("isDash") != true)
         {
@@ -145,14 +149,19 @@ public class CharacterController : MonoBehaviour
     }
 
     // Jump //
-    public void Jump()
+    private void Jump()
     {
-        if (!anim.GetBool("isJump") && !anim.GetBool("isDash"))
+        if (!anim.GetBool("isJump") && !anim.GetBool("isDash") && isGrounded && !DoubleJump)
         {
-            isGounded = false;
+            isGrounded = false;
             isJump = true;
-
             anim.SetBool("isJump", true);
+            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+            
+        }
+        else if(isJump && !DoubleJump)
+        {
+            DoubleJump = true;
             rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         }
     }
@@ -197,19 +206,40 @@ public class CharacterController : MonoBehaviour
     private IEnumerator TakeHit(Vector2 targetPos)
     {
         currentHP -= 1;
-        canDash = true;
-        gameObject.layer = 14;
-        anim.SetTrigger("PlayerDamaged");
-        int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
-        rb.AddForce(new Vector2(dirc, 1) * 7 , ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.3f);
-        gameObject.layer = 6;
+        Debug.Log("CurrentHP : " + currentHP);
+        if(currentHP > 0)
+        {
+            canDash = true;
+            gameObject.layer = 14;
+            anim.SetTrigger("PlayerDamaged");
+            int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
+            rb.AddForce(new Vector2(dirc, 1) * 15, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.3f);
+            gameObject.layer = 6;
+        }
+        else
+        {
+            StartCoroutine(Died(targetPos));
+        }
     }
 
     // Die //
-    void Die()
+    void Die(Vector2 targetPos)
     {
+        gameObject.layer = 14;
+        int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
+        rb.AddForce(new Vector2(dirc, 1) * 7, ForceMode2D.Impulse);
         anim.SetTrigger("Death");
+        cc.enabled = false;
+    }
+    private IEnumerator Died(Vector2 targetPos)
+    {
+        gameObject.layer = 14;
+        int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
+        rb.AddForce(new Vector2(dirc, 1) * 15, ForceMode2D.Impulse);
+        anim.SetTrigger("Death");
+        yield return new WaitForSeconds(0.8f);
+        cc.enabled = false;
     }
 }
 
