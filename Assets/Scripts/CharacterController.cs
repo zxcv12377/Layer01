@@ -132,8 +132,7 @@ public class CharacterController : MonoBehaviour
         }
         if (collision.gameObject.tag == "MainCamera")
         {
-
-            StartCoroutine(Died(collision.transform.position));
+            Die(collision.transform.position);
         }
         if (collision.gameObject.tag == "Wall")
         {
@@ -208,7 +207,6 @@ public class CharacterController : MonoBehaviour
     private IEnumerator TakeHit(Vector2 targetPos)
     {
         currentHP -= 1;
-        Debug.Log("CurrentHP : " + currentHP);
         if(currentHP > 0)
         {
             canDash = true;
@@ -221,7 +219,7 @@ public class CharacterController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Died(targetPos));
+            Die(targetPos);
         }
     }
 
@@ -230,19 +228,11 @@ public class CharacterController : MonoBehaviour
     {
         gameObject.layer = 14;
         int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
-        rb.AddForce(new Vector2(dirc, 1) * 7, ForceMode2D.Impulse);
-        anim.SetTrigger("Death");
-        cc.enabled = false;
-    }
-    private IEnumerator Died(Vector2 targetPos)
-    {
-        gameObject.layer = 14;
-        int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
         rb.AddForce(new Vector2(dirc, 1) * 15, ForceMode2D.Impulse);
         anim.SetTrigger("Death");
-        yield return new WaitForSeconds(0.8f);
         cc.enabled = false;
     }
+
 }
 
 
