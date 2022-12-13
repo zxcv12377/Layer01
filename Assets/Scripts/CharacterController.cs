@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 1. 다음 만들것 체력, 죽는 것, 히트모션 (해결)
-// 2. 본격적으로 벽을 만들어야함 (Enemy)
+// 2. 본격적으로 벽을 만들어야함 (해결)
 // 3. 플랫폼도 수정
 // 4. 카메라 움직임 (해결)
 // 5. 스카이박스 움직임 (해결)
 // (추가)
 // 6. 대쉬 움직임 수정하기 (해결) 
 // 7. 인터페이스
+// 8. 벽의 히트모션 만들기
+// 9. 더욱 다양한 벽들 양산하기
 public class CharacterController : MonoBehaviour
 {
     //Component
