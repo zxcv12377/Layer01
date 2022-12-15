@@ -34,7 +34,8 @@ public class CharacterController : MonoBehaviour
     private bool isGrounded = true;
     private bool isJump = false;
     private bool DoubleJump = false;
-    
+    //      Attack
+    public bool isAttack = false;
 
 
     //public
@@ -134,10 +135,6 @@ public class CharacterController : MonoBehaviour
         {
             Die(collision.transform.position);
         }
-        if (collision.gameObject.tag == "Wall")
-        {
-            Debug.Log("Coll");
-        }
     }
 
     // Attack //
@@ -198,8 +195,14 @@ public class CharacterController : MonoBehaviour
         else anim.SetBool("isMove", true);
     }
 
+    public void HitcollisionOn()
+    {
+        isAttack = true;
+    }
+
     public void StopAttack() // Attack 애니메이션에 사용중
     {
+        isAttack = false;
         anim.SetBool("isAttack", false);
     }
 
