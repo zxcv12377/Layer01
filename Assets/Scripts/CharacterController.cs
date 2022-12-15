@@ -10,7 +10,7 @@ using UnityEngine;
 // (추가)
 // 6. 대쉬 움직임 수정하기 (해결) 
 // 7. 인터페이스
-// 8. 벽의 히트모션 만들기
+// 8. 벽의 히트모션 만들기 (해결)
 // 9. 더욱 다양한 벽들 양산하기
 public class CharacterController : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class CharacterController : MonoBehaviour
     private SpriteRenderer sr;
     private CharacterController cc;
 
-    //private
+    //  private
     //      Move
     private float Hmove;
     private float MoveSpeed = 5f;
@@ -105,12 +105,14 @@ public class CharacterController : MonoBehaviour
             if (Input.GetAxisRaw("Horizontal") > 0)
             {
                 movePosition = Vector3.right;
-                sr.flipX = false;
+                //sr.flipX = false;
+                transform.rotation = Quaternion.Euler(new(0, 0, 0));
             }
             else if (Input.GetAxisRaw("Horizontal") < 0)
             {
                 movePosition = Vector3.left;
-                sr.flipX = true;
+                //sr.flipX = true;
+                transform.rotation = Quaternion.Euler(new(0, 180, 0));
             }
         }
         transform.position += movePosition * MoveSpeed * Time.deltaTime;

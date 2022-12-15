@@ -5,16 +5,33 @@ using UnityEngine;
 public class WallState : MonoBehaviour
 {
 
-    [SerializeField] private CharacterController CC;
+    private CharacterController CC;
 
     [SerializeField] [Range(0.01f,0.1f)] float ShakeRange = 0.05f;
     [SerializeField] float ShakeDuration = 0.2f;
     Vector3 Pos;
 
+    private GameObject player;
+
     public float currentHP;
     public float maxHP;
     public float Defence;
-    
+
+    private void Start()
+    {
+        StartCoroutine(FindPlayer());
+    }
+
+    IEnumerator FindPlayer()
+    {
+        while(player == null)
+        {
+            yield return new WaitForSeconds(0.2f);
+            player = GameObject.FindWithTag("Player");
+            CC = player.GetComponent<CharacterController>();
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "MeleeAttack")
