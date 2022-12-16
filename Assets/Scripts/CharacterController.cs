@@ -11,7 +11,7 @@ using UnityEngine;
 // 6. 대쉬 움직임 수정하기 (해결) 
 // 7. 인터페이스
 // 8. 벽의 히트모션 만들기 (해결)
-// 9. 더욱 다양한 벽들 양산하기
+// 9. 더욱 다양한 벽들 양산하기 (해결)
 public class CharacterController : MonoBehaviour
 {
     //Component

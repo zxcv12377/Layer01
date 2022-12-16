@@ -8,6 +8,7 @@ TagManager:
   - Spike
   - Wall
   - MeleeAttack
+  - SpawnTrigger
   layers:
   - Default
   - TransparentFX
