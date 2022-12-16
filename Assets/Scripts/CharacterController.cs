@@ -36,6 +36,7 @@ public class CharacterController : MonoBehaviour
     private bool DoubleJump = false;
     //      Attack
     public bool isAttack = false;
+    private bool isDashAttack = false;
 
 
     //public
@@ -79,7 +80,14 @@ public class CharacterController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.X))
         {
-            Attack();
+            if(isGrounded == true)
+            {
+                Attack();
+            }
+            else
+            {
+                DashAttack();
+            }
         }
 
         if (Input.GetKey(KeyCode.Z) && canDash)
@@ -129,7 +137,7 @@ public class CharacterController : MonoBehaviour
             anim.SetBool("isJump", false);
             anim.SetBool("isFalling", false);
         }
-        if (collision.gameObject.tag == "Spike") //&& !isHit)
+        if (collision.gameObject.tag == "Spike")
         {
             StartCoroutine(TakeHit(collision.transform.position));
         }
@@ -145,6 +153,16 @@ public class CharacterController : MonoBehaviour
         if (anim.GetBool("isAttack") != true && anim.GetBool("isDash") != true)
         {
             anim.SetBool("isAttack", true);
+        }
+    }
+
+    private void DashAttack()
+    {
+        if (!isDashAttack)
+        {
+            isAttack = true;
+            isDashAttack = true;
+            anim.SetTrigger("DashAttack");
         }
     }
 
@@ -206,6 +224,12 @@ public class CharacterController : MonoBehaviour
     {
         isAttack = false;
         anim.SetBool("isAttack", false);
+    }
+
+    public void StopDashAttack() // DashAttack 애니메이션에 사용중
+    {
+        isAttack = false;
+        isDashAttack = false;
     }
 
     // Hit //
