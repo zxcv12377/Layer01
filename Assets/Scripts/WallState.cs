@@ -7,11 +7,11 @@ public class WallState : MonoBehaviour
 
     private CharacterController CC;
 
+    private GameObject player;
+
     [SerializeField] [Range(0.01f,0.1f)] float ShakeRange = 0.05f;
     [SerializeField] float ShakeDuration = 0.2f;
     Vector3 Pos;
-
-    private GameObject player;
 
     public float currentHP;
     public float maxHP;
