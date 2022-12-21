@@ -8,6 +8,7 @@ TagManager:
   - Spike
   - Wall
   - MeleeAttack
+  - Destruct
   - SpawnTrigger
   layers:
   - Default
@@ -21,11 +22,11 @@ TagManager:
   - Platform
   - Spike
   - CameraHitBox
-  - 
-  - 
+  - SpawnTrigger
+  - Dzone
   - BackGround
   - PlayerHit
-  - 
+  - Destructible
   - 
   - 
   - 

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class WallState : MonoBehaviour
 {
-
     private CharacterController CC;
 
     private GameObject player;
 
     [SerializeField] [Range(0.01f,0.1f)] float ShakeRange = 0.05f;
     [SerializeField] float ShakeDuration = 0.2f;
-    Vector3 Pos;
+    Vector3 mainPos;
 
+    [SerializeField] private GameObject destructiblePieces;
+    private bool isDestroyed = false;
+
+    [Header("State")]
     public float currentHP;
     public float maxHP;
     public float Defence;
@@ -38,13 +41,13 @@ public class WallState : MonoBehaviour
         {
             
             ShakeBody();
-            currentHP -= CC.Damage;
+            TakeHit();
         }
     }
 
     private void ShakeBody()
     {
-        Pos = transform.position;
+        mainPos = transform.position;
         InvokeRepeating("StartShake", 0f, 0.005f);
         Invoke("StopShake", ShakeDuration);
     }
@@ -62,6 +65,25 @@ public class WallState : MonoBehaviour
     private void StopShake()
     {
         CancelInvoke("StartShake");
-        transform.position = Pos;
+        transform.position = mainPos;
+    }
+
+    private void TakeHit()
+    {
+        currentHP -= CC.Damage;
+        if(currentHP <= 0 && !isDestroyed)
+        {
+            isDestroyed = true;
+            mainPos = new Vector3(transform.position.x, transform.position.y, 2);
+            GameObject debris = Instantiate(destructiblePieces, mainPos, transform.rotation);
+            StartCoroutine(Destructobj(debris));
+            Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator Destructobj(GameObject obj)
+    {
+        yield return new WaitForSeconds(1f);
+        Destroy(obj);
     }
 }

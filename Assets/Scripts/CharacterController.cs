@@ -9,9 +9,10 @@ using UnityEngine;
 // 5. 스카이박스 움직임 (해결)
 // (추가)
 // 6. 대쉬 움직임 수정하기 (해결) 
-// 7. 인터페이스
+// 7. 인터페이스 (최우선)
 // 8. 벽의 히트모션 만들기 (해결)
 // 9. 더욱 다양한 벽들 양산하기 (해결)
+
 public class CharacterController : MonoBehaviour
 {
     //Component
@@ -24,7 +25,7 @@ public class CharacterController : MonoBehaviour
     //      Move
     private float Hmove;
     private float MoveSpeed = 5f;
-    [SerializeField] private float jumpPower = 25f;
+    private float jumpPower = 25f;
     //      Dash
     private bool canDash = true;
     private float DashPower = 10f;
@@ -41,6 +42,7 @@ public class CharacterController : MonoBehaviour
 
     //public
     //      State
+    [Header("State")]
     public float maxHP;
     public float currentHP;
     public float Damage;
