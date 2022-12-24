@@ -8,7 +8,6 @@ public class WallSpawn : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger");
         if(collision.tag == "SpawnTrigger")
         {
             wallStore = collision.GetComponent<WallStore>();

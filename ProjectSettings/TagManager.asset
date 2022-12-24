@@ -11,6 +11,8 @@ TagManager:
   - Destruct
   - SpawnTrigger
   - HPplus
+  - WorldManager
+  - ButtonManager
   layers:
   - Default
   - TransparentFX

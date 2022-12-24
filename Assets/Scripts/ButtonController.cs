@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class ButtonController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private WorldManagerController WMC;
 
-    // Update is called once per frame
-    void Update()
+    public void SelectCard1()
     {
-        
+        Debug.Log("Select1111111111111");
+        WMC.IsPause = false;
+    }
+    public void SelectCard2()
+    {
+        Debug.Log("Select2222222222222");
+        WMC.IsPause = false;
+    }
+    public void SelectCard3()
+    {
+        Debug.Log("Select33333333333");
+        WMC.IsPause = false;
     }
 }

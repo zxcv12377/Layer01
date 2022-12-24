@@ -5,8 +5,10 @@ using UnityEngine;
 public class WallState : MonoBehaviour
 {
     private CharacterController CC;
-
     private GameObject player;
+    private WorldManagerController WMC;
+    [SerializeField] private GameObject WMCobj;
+
 
     [SerializeField] [Range(0.01f,0.1f)] float ShakeRange = 0.05f;
     [SerializeField] float ShakeDuration = 0.2f;
@@ -14,8 +16,6 @@ public class WallState : MonoBehaviour
 
     [SerializeField] private GameObject destructiblePieces;
     private bool isDestroyed = false;
-
-    [HideInInspector] public bool isPause = false;
 
     [Header("State")]
     public float currentHP;
@@ -29,12 +29,15 @@ public class WallState : MonoBehaviour
 
     IEnumerator FindPlayer()
     {
-        while(player == null)
+        while(player == null && WMCobj == null)
         {
             yield return new WaitForSeconds(0.2f);
             player = GameObject.FindWithTag("Player");
+            WMCobj = GameObject.FindWithTag("WorldManager");
             CC = player.GetComponent<CharacterController>();
+            WMC = WMCobj.GetComponent<WorldManagerController>();
         }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -76,18 +79,17 @@ public class WallState : MonoBehaviour
         if(currentHP <= 0 && !isDestroyed)
         {
             isDestroyed = true;
-            mainPos = new Vector3(transform.position.x, transform.position.y, 2);
-            GameObject debris = Instantiate(destructiblePieces, mainPos, transform.rotation);
-            StartCoroutine(Destructobj(debris));
-            Destroy(gameObject);
-            Time.timeScale = 0;
-            isPause = true;
+            StartCoroutine(Destroyobj());
         }
     }
 
-    private IEnumerator Destructobj(GameObject obj)
+    private IEnumerator Destroyobj()
     {
+        mainPos = new Vector3(transform.position.x, transform.position.y, 2);
+        Instantiate(destructiblePieces, mainPos, transform.rotation);
+        gameObject.SetActive(false);
+        WMC.IsPause = true;
         yield return new WaitForSeconds(1f);
-        Destroy(obj);
+        Destroy(gameObject);
     }
 }
