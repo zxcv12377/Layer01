@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 // 1. 다음 만들것 체력, 죽는 것, 히트모션 (해결)
 // 2. 본격적으로 벽을 만들어야함 (해결)
@@ -39,12 +40,16 @@ public class CharacterController : MonoBehaviour
     public bool isAttack = false;
     private bool isDashAttack = false;
 
+    //      HP
+    public Image[] hearts;
+    public Sprite fullHP;
+    public Sprite emptyHP;
 
     //public
     //      State
     [Header("State")]
-    public float maxHP;
-    public float currentHP;
+    [Range(0, 10)] public int maxHP;
+    [Range(0, 10)] public int currentHP;
     public float Damage;
 
     // Start is called before the first frame update
@@ -64,7 +69,6 @@ public class CharacterController : MonoBehaviour
         }
         Hmove = Input.GetAxisRaw("Horizontal");
         PlayerMove();
-
     }
     // Update is called once per frame
     void Update()
@@ -103,6 +107,27 @@ public class CharacterController : MonoBehaviour
         }
 
         anim.SetFloat("yVelocity", rb.velocity.y);
+
+        // HP //
+        for(int i = 0; i < hearts.Length; i++)
+        {
+            if(i < currentHP)
+            {
+                hearts[i].sprite = fullHP;
+            }
+            else
+            {
+                hearts[i].sprite = emptyHP;
+            }
+            if(i < maxHP)
+            {
+                hearts[i].enabled = true;
+            }
+            else
+            {
+                hearts[i].enabled = false;
+            }
+        }
     }
     
     // Move //
@@ -146,6 +171,14 @@ public class CharacterController : MonoBehaviour
         if (collision.gameObject.tag == "MainCamera")
         {
             Die(collision.transform.position);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "HPplus")
+        {
+            
         }
     }
 

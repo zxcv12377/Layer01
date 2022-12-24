@@ -15,6 +15,8 @@ public class WallState : MonoBehaviour
     [SerializeField] private GameObject destructiblePieces;
     private bool isDestroyed = false;
 
+    [HideInInspector] public bool isPause = false;
+
     [Header("State")]
     public float currentHP;
     public float maxHP;
@@ -78,6 +80,8 @@ public class WallState : MonoBehaviour
             GameObject debris = Instantiate(destructiblePieces, mainPos, transform.rotation);
             StartCoroutine(Destructobj(debris));
             Destroy(gameObject);
+            Time.timeScale = 0;
+            isPause = true;
         }
     }
 

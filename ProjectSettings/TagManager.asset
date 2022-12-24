@@ -10,6 +10,7 @@ TagManager:
   - MeleeAttack
   - Destruct
   - SpawnTrigger
+  - HPplus
   layers:
   - Default
   - TransparentFX

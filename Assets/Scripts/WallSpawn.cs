@@ -13,13 +13,12 @@ public class WallSpawn : MonoBehaviour
         {
             wallStore = collision.GetComponent<WallStore>();
             GameObject Wall = wallStore.Wall;
-            StartCoroutine(EnemySpawn(Wall));
+            EnemySpawn(Wall);
         }
     }
 
-    IEnumerator EnemySpawn(GameObject w)
+    private void EnemySpawn(GameObject w)
     {
-        yield return new WaitForSeconds(0.1f);
         Vector3 pos = new Vector3(w.transform.position.x, w.transform.position.y, 0);
         Instantiate(w, pos, Quaternion.identity);
     }
