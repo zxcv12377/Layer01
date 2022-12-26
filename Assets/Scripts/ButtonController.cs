@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour
 {
@@ -8,17 +9,31 @@ public class ButtonController : MonoBehaviour
 
     public void SelectCard1()
     {
-        Debug.Log("Select1111111111111");
         WMC.IsPause = false;
     }
     public void SelectCard2()
     {
-        Debug.Log("Select2222222222222");
         WMC.IsPause = false;
     }
     public void SelectCard3()
     {
-        Debug.Log("Select33333333333");
         WMC.IsPause = false;
+    }
+    
+    private void CardApply(int num)
+    {
+        switch (num)
+        {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                break;
+        }
     }
 }
