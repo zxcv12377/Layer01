@@ -10,27 +10,17 @@ public class WorldManagerController : MonoBehaviour
     [SerializeField] private GameObject CardSet;
 
     [SerializeField] private GameObject[] card;
+
     private Text[] cardtxt = new Text[3];
 
-    private List<int> randList = new List<int>();
+    [HideInInspector] public List<int> randList = new List<int>();
 
+    [SerializeField] private int cardAmount;
 
-    private void Update()
-    {
-        if (IsPause)
-        {
-            SelectCardVisible();
-        }
-        else
-        {
-            SelectCardHidden();
-        }
-    }
-
-    private void SelectCardVisible()
+    public void SelectCardVisible()
     {
         Time.timeScale = 0;
-        CardSet.SetActive(IsPause);
+        CardSet.SetActive(true);
         Unduplicatied();
         for(int i = 0; i < 3; i++)
         {
@@ -38,10 +28,10 @@ public class WorldManagerController : MonoBehaviour
         }
     }
 
-    private void SelectCardHidden()
+    public void SelectCardHidden()
     {
         randList.Clear();
-        CardSet.SetActive(IsPause);
+        CardSet.SetActive(false);
         Time.timeScale = 1;
     }
 
@@ -51,13 +41,13 @@ public class WorldManagerController : MonoBehaviour
         switch (num)
         {
             case 0:
-                cardtxt[n].text = "0번 선택지 입니다.";
+                cardtxt[n].text = "최대체력을 한칸 획득합니다.";
                 break;
             case 1:
-                cardtxt[n].text = "1번 선택지 입니다.";
+                cardtxt[n].text = "데미지가 증가합니다.";
                 break;
             case 2:
-                cardtxt[n].text = "2번 선택지 입니다.";
+                cardtxt[n].text = "체력을 한칸 회복합니다.";
                 break;
             case 3:
                 cardtxt[n].text = "3번 선택지 입니다.";
@@ -69,18 +59,17 @@ public class WorldManagerController : MonoBehaviour
 
     private void Unduplicatied()
     {
-        int N = 4;
         List<int> list = new List<int>();
-        for(int i = 0; i < N; ++i)
+        for(int i = 0; i < cardAmount; ++i)
         {
             list.Add(i);
         }
 
         for(int i = 0; i < 3; i++)
         {
-            int a = Random.Range(0,N-i);
+            int a = Random.Range(0,cardAmount-i);
+            randList.Add(list[a]);
             list.RemoveAt(a);
-            randList.Add(a);
         }
     }
 }

@@ -89,6 +89,7 @@ public class WallState : MonoBehaviour
         Instantiate(destructiblePieces, mainPos, transform.rotation);
         gameObject.SetActive(false);
         WMC.IsPause = true;
+        WMC.SelectCardVisible();
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
     }

@@ -4,15 +4,26 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // 1. 다음 만들것 체력, 죽는 것, 히트모션 (해결)
+
 // 2. 본격적으로 벽을 만들어야함 (해결)
+
 // 3. 플랫폼도 수정
+
 // 4. 카메라 움직임 (해결)
+
 // 5. 스카이박스 움직임 (해결)
 // (추가)
 // 6. 대쉬 움직임 수정하기 (해결) 
+
 // 7. 인터페이스 (최우선)
+//   a. 캐릭터 선택창
+//   b. 메인화면
+
 // 8. 벽의 히트모션 만들기 (해결)
+
 // 9. 더욱 다양한 벽들 양산하기 (해결)
+
+// 10. 선택 카드 다양하게 만들기
 
 public class CharacterController : MonoBehaviour
 {
@@ -37,13 +48,17 @@ public class CharacterController : MonoBehaviour
     private bool isJump = false;
     private bool DoubleJump = false;
     //      Attack
-    public bool isAttack = false;
+    [HideInInspector] public bool isAttack = false;
     private bool isDashAttack = false;
 
     //      HP
     public Image[] hearts;
     public Sprite fullHP;
     public Sprite emptyHP;
+
+    //      interface
+    [HideInInspector] public bool isPause = false;
+    [SerializeField] private GameObject PauseInterface;
 
     //public
     //      State
@@ -104,6 +119,22 @@ public class CharacterController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             Jump();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if(!isPause)
+            {
+                Time.timeScale = 0;
+                isPause = true;
+                PauseInterface.SetActive(true);
+            }
+            else
+            {
+                Time.timeScale = 1;
+                isPause = false;
+                PauseInterface.SetActive(false);
+            }
         }
 
         anim.SetFloat("yVelocity", rb.velocity.y);
@@ -295,8 +326,7 @@ public class CharacterController : MonoBehaviour
         rb.AddForce(new Vector2(dirc, 1) * 15, ForceMode2D.Impulse);
         anim.SetTrigger("Death");
         cc.enabled = false;
-    }
-
+    }    
 }
 
 
