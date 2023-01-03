@@ -133,11 +133,12 @@ GameObject:
   m_Component:
   - component: {fileID: 12439357}
   - component: {fileID: 12439360}
+  - component: {fileID: 12439361}
   - component: {fileID: 12439359}
   - component: {fileID: 12439358}
   m_Layer: 5
   m_Name: Hero_Knight
-  m_TagString: Untagged
+  m_TagString: CharacterPicture
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,7 +157,7 @@ RectTransform:
   m_Children:
   - {fileID: 661654335}
   m_Father: {fileID: 264844330}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -206,7 +207,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 12439359}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 942961756}
+        m_TargetAssemblyTypeName: CharacterSelectButtonController, Assembly-CSharp
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &12439359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +258,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 12439356}
   m_CullTransparentMesh: 1
+--- !u!114 &12439361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12439356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aadf948d679191a47aef4b1837e84c32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &79314322
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,11 +519,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 344042875}
-  - {fileID: 12439357}
-  - {fileID: 1916547148}
   - {fileID: 2109233719}
   - {fileID: 1005366988}
   - {fileID: 1879450626}
+  - {fileID: 12439357}
+  - {fileID: 1916547148}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -756,10 +781,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c727fd3f54e0414d8a2b04cb4990bc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterUI:
+  uitxt: {fileID: 2109233716}
+  SelectChracter:
   - {fileID: 12439356}
   - {fileID: 1916547147}
-  uitxt: {fileID: 2109233716}
 --- !u!4 &942961757
 Transform:
   m_ObjectHideFlags: 0
@@ -888,7 +913,7 @@ RectTransform:
   m_Children:
   - {fileID: 79314323}
   m_Father: {fileID: 264844330}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -917,10 +942,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_HighlightedColor: {r: 1, g: 0.854902, b: 0.2784314, a: 1}
+    m_PressedColor: {r: 1, g: 0.85490197, b: 0.2784314, a: 1}
+    m_SelectedColor: {r: 1, g: 0.854902, b: 0.2784314, a: 1}
+    m_DisabledColor: {r: 1, g: 0.854902, b: 0.2784314, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -990,7 +1015,7 @@ GameObject:
   - component: {fileID: 1879450628}
   - component: {fileID: 1879450627}
   m_Layer: 5
-  m_Name: return
+  m_Name: Return
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1010,7 +1035,7 @@ RectTransform:
   m_Children:
   - {fileID: 997365259}
   m_Father: {fileID: 264844330}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1039,10 +1064,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_HighlightedColor: {r: 1, g: 0.85490197, b: 0.2784314, a: 1}
+    m_PressedColor: {r: 1, g: 0.854902, b: 0.2784314, a: 1}
+    m_SelectedColor: {r: 1, g: 0.854902, b: 0.2784314, a: 1}
+    m_DisabledColor: {r: 1, g: 0.854902, b: 0.2784314, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1197,7 +1222,7 @@ GameObject:
   - component: {fileID: 1916547149}
   m_Layer: 5
   m_Name: New1
-  m_TagString: Untagged
+  m_TagString: CharacterPicture
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1216,7 +1241,7 @@ RectTransform:
   m_Children:
   - {fileID: 252168612}
   m_Father: {fileID: 264844330}
-  m_RootOrder: 2
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1266,7 +1291,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1916547150}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 942961756}
+        m_TargetAssemblyTypeName: CharacterSelectButtonController, Assembly-CSharp
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1916547150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1322,7 +1359,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2109233717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1356,7 +1393,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\uCE90\uB9AD\uD130 \uC774\uB984"
+  m_Text: 
 --- !u!222 &2109233718
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1378,7 +1415,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 264844330}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
