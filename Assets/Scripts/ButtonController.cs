@@ -42,7 +42,7 @@ public class ButtonController : MonoBehaviour
 
     public void GameEnd()
     {
-        SceneManager.LoadScene("Main");
+        Application.Quit();
     }
 
     public void SelectCard1()
