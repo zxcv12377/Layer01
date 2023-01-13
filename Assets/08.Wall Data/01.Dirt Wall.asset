@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87bbce7a1bf15d44b19fb6e7dd1d906, type: 3}
+  m_Name: 01.Dirt Wall
+  m_EditorClassIdentifier: 
+  wallName: DirtWall
+  currenthp: 5
+  maxhp: 5
+  defence: 0
+  sprite: {fileID: 21300000, guid: f715a358cab971a439d5c5579bb9fd9c, type: 2}

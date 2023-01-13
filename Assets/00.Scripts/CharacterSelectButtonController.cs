@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelectButtonController : MonoBehaviour
 {
@@ -24,11 +25,10 @@ public class CharacterSelectButtonController : MonoBehaviour
     {
         if(DataMgr.instance.currentCharacter == Character.Hero_Knight)
         {
-            print("Àü»ç");
+            SceneManager.LoadScene("Level1");
         }
         else if (DataMgr.instance.currentCharacter == Character.New1)
         {
-            print("¾ÈµÊ");
             activate = true;
             Warning.SetActive(true);
         }

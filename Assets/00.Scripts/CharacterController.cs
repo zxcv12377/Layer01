@@ -88,6 +88,11 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            print(DataMgr.instance.currentCharacter);
+        }
+
         if (anim.GetBool("isDash"))
         {
             return;

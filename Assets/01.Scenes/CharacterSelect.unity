@@ -496,10 +496,10 @@ Canvas:
   m_GameObject: {fileID: 264844326}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 1885738319}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -546,7 +546,7 @@ GameObject:
   - component: {fileID: 322338185}
   - component: {fileID: 322338184}
   m_Layer: 0
-  m_Name: DataManager
+  m_Name: DontDestroyOnLoad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
