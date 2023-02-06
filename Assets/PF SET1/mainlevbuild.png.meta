@@ -51,9 +51,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -28534,10 +28534,10 @@ TextureImporter:
       mainlevbuild_1011: 961056732
       mainlevbuild_358: 768231103
       mainlevbuild_1156: 1124959936
+      mainlevbuild_1055: 155059520
       mainlevbuild_666: 1868371224
       mainlevbuild_144: -1363636347
       mainlevbuild_791: 1123157243
-      mainlevbuild_1055: 155059520
       mainlevbuild_613: 1450484362
       mainlevbuild_1314: 1177780429
       mainlevbuild_1177: -1721121284
@@ -28648,23 +28648,23 @@ TextureImporter:
       mainlevbuild_172: -721373386
       mainlevbuild_411: 968349950
       mainlevbuild_323: 508373755
-      mainlevbuild_679: -1965776681
-      mainlevbuild_20: -720989743
       mainlevbuild_837: 1817737512
-      mainlevbuild_898: 352150570
+      mainlevbuild_20: -720989743
       mainlevbuild_1016: -424610615
+      mainlevbuild_1318: 1815301552
       mainlevbuild_555: 1083912918
       mainlevbuild_220: -1286917224
-      mainlevbuild_143: 1156336
-      mainlevbuild_973: -165567366
+      mainlevbuild_679: -1965776681
+      mainlevbuild_898: 352150570
       mainlevbuild_139: -575486776
+      mainlevbuild_143: 1156336
       mainlevbuild_370: 602557175
       mainlevbuild_65: 895262854
       mainlevbuild_33: 484846752
       mainlevbuild_1336: 1314626264
       mainlevbuild_1201: 482075212
+      mainlevbuild_973: -165567366
       mainlevbuild_5: 1749121258
-      mainlevbuild_1318: 1815301552
       mainlevbuild_677: -1767432887
       mainlevbuild_809: -1949334179
       mainlevbuild_15: -184963929

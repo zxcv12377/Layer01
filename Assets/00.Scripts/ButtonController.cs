@@ -12,6 +12,7 @@ public class ButtonController : MonoBehaviour
 
     private CharacterController CC;
     private GameObject player;
+    
 
     private void Start()
     {
@@ -38,6 +39,7 @@ public class ButtonController : MonoBehaviour
     public void CharacterSelect()
     {
         SceneManager.LoadScene("CharacterSelect");
+        
     }
 
     public void GameEnd()
