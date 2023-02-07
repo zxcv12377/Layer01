@@ -80,28 +80,6 @@ public class MapEditorManager : BaseMonoSingleton<MapEditorManager>
         }
     }
 
-    //public void TileButtonCreate()
-    //{
-    //    //foreach (var data in DataManager.tileDataStorage.tileData)
-    //    //{
-    //    //    string[] n = data.Keys.ToString().Split('_');
-    //    //    if (string.Compare(n[0], "spike") == 0)
-    //    //    {
-    //    //        var pos = leftDown.localPosition;
-    //    //        //isGray = !isGray;
-    //    //        Button newObj = Instantiate(TilePrefab, TileParent.position, Quaternion.identity, TileParent);
-    //    //        newObj.image.sprite = ResourceManager.GetSprite(data.Keys.ToString());
-    //    //        newObj.gameObject.SetActive(true);
-    //    //        Debug.Log("Button Create Succsess");
-    //    //    }
-    //    //}
-    //    //foreach(var d in )
-    //    Button newObj = Instantiate(TilePrefab, TileParent.position, Quaternion.identity, TileParent);
-    //    newObj.image.sprite = ResourceManager.GetSprite("spike_1_1");
-    //    newObj.gameObject.SetActive(true);
-    //    //Debug.Log("Button Create Fail");
-    //    //newObj.image.sprite = ResourceManager.GetSprite()
-    //}
     public void TileButtonCreate()
     {
         foreach (var data in DataManager.tileDataStorage.tileDatas)
