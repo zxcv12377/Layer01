@@ -4087,7 +4087,7 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: 1
+    aniso: 0
     mipBias: 0
     wrapU: 1
     wrapV: 1
@@ -32587,10 +32587,10 @@ TextureImporter:
       mainlevbuild_1011: 4302543932976968468
       mainlevbuild_358: 8771800690572251117
       mainlevbuild_1156: -4870510148184516879
+      mainlevbuild_1055: -8770410972719954827
       mainlevbuild_666: 6199901106974862268
       mainlevbuild_144: 6810184746521424398
       mainlevbuild_791: -1629731621839714313
-      mainlevbuild_1055: -8770410972719954827
       mainlevbuild_613: 7020292942471625857
       mainlevbuild_1314: -5838674151595680729
       mainlevbuild_1177: -6301752166709294174
@@ -32701,23 +32701,23 @@ TextureImporter:
       mainlevbuild_172: 6796828818626706570
       mainlevbuild_411: 123570389804522891
       mainlevbuild_323: -3128999933988736491
-      mainlevbuild_679: 4281627474462229798
-      mainlevbuild_20: -6594178671280562777
       mainlevbuild_837: 7444277263301983959
-      mainlevbuild_898: 2128856273901450230
+      mainlevbuild_20: -6594178671280562777
       mainlevbuild_1016: 1582002677269405499
+      mainlevbuild_679: 4281627474462229798
+      mainlevbuild_1318: -2503319063193125830
       mainlevbuild_555: 7209602714812117355
       mainlevbuild_220: -7837226088529743114
       mainlevbuild_143: 8564731274986669891
-      mainlevbuild_973: -1861789740854541480
+      mainlevbuild_898: 2128856273901450230
       mainlevbuild_139: 1991757941816529116
+      mainlevbuild_973: -1861789740854541480
       mainlevbuild_370: -2251498009478840440
       mainlevbuild_65: 4198835716397797896
       mainlevbuild_33: -235880382000146013
       mainlevbuild_1336: 4095660313736678878
       mainlevbuild_1201: 505872651684305388
       mainlevbuild_5: -7498149340825567013
-      mainlevbuild_1318: -2503319063193125830
       mainlevbuild_677: 125117737297323630
       mainlevbuild_809: -7084085071257590805
       mainlevbuild_15: 8663717305663940273

@@ -249,8 +249,8 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
-    aniso: 16
+    filterMode: 0
+    aniso: 0
     mipBias: 0
     wrapU: 1
     wrapV: 1
@@ -1892,11 +1892,11 @@ TextureImporter:
       trees-trunk-dark_12: 21300024
       trees-trunk-dark_69: 21300138
       trees-trunk-dark_37: 21300074
-      trees-trunk-dark_34: 21300068
       trees-trunk-dark_28: 21300056
+      trees-trunk-dark_68: 21300136
       trees-trunk-dark_47: 21300094
       trees-trunk-dark_58: 21300116
-      trees-trunk-dark_68: 21300136
+      trees-trunk-dark_34: 21300068
       trees-trunk-dark_22: 21300044
       trees-trunk-dark_1: 21300002
       trees-trunk-dark_60: 21300120

@@ -2887,7 +2887,7 @@ TextureImporter:
   textureSettings:
     serializedVersion: 2
     filterMode: 0
-    aniso: 1
+    aniso: 0
     mipBias: 0
     wrapU: 1
     wrapV: 1
@@ -23001,16 +23001,16 @@ TextureImporter:
       decorative_obj_723: 4424899386634865142
       decorative_obj_407: 5025517962378194608
       decorative_obj_116: 3919849330060206291
-      decorative_obj_49: 5594784124063905167
       decorative_obj_638: 3144701195992921640
+      decorative_obj_49: 5594784124063905167
       decorative_obj_269: 7827579650480418079
       decorative_obj_32: -6193186498803284486
       decorative_obj_898: 8392761683182671017
       decorative_obj_295: -7973541466364320521
       decorative_obj_2: -3865615691702928371
+      decorative_obj_871: -89503813067481882
       decorative_obj_112: 2480107435166635246
       decorative_obj_849: 2965818584477497059
-      decorative_obj_871: -89503813067481882
       decorative_obj_887: 8593703061350229140
       decorative_obj_840: 5313330328466645413
       decorative_obj_510: -7128878371242453070
@@ -23070,9 +23070,9 @@ TextureImporter:
       decorative_obj_420: -259521747011529651
       decorative_obj_349: 7083040581618068542
       decorative_obj_63: -1628418565087371237
-      decorative_obj_217: -8588280835408292606
       decorative_obj_337: -5998011284413562567
       decorative_obj_617: -8559558140144334258
+      decorative_obj_217: -8588280835408292606
       decorative_obj_289: 8742385130352508431
       decorative_obj_204: -8450140644209009642
       decorative_obj_710: 6483953285531079660
@@ -23221,19 +23221,19 @@ TextureImporter:
       decorative_obj_850: 34256189945130320
       decorative_obj_615: -2773485407824896584
       decorative_obj_92: 8850515799516212045
-      decorative_obj_762: 6265138593984239179
-      decorative_obj_317: 7417803430984075089
       decorative_obj_778: -1969370011720190480
+      decorative_obj_317: 7417803430984075089
+      decorative_obj_762: 6265138593984239179
+      decorative_obj_947: -1204024196144763229
       decorative_obj_151: -3127536787458286870
       decorative_obj_806: 4803778389380591456
-      decorative_obj_947: -1204024196144763229
       decorative_obj_764: -5280266995694802425
       decorative_obj_60: -4516755371609694979
-      decorative_obj_157: 1325115768713221073
       decorative_obj_203: 5920986564106378863
-      decorative_obj_882: 131979774856130044
+      decorative_obj_157: 1325115768713221073
       decorative_obj_322: 2868489266828320249
       decorative_obj_688: -1899493281669194861
+      decorative_obj_882: 131979774856130044
       decorative_obj_30: -4525594759196546097
       decorative_obj_421: -476426975175894007
       decorative_obj_800: 6190371267848288464
@@ -23246,8 +23246,8 @@ TextureImporter:
       decorative_obj_761: 7709292756931673507
       decorative_obj_382: -5822264988939250953
       decorative_obj_352: -6750422889745112118
-      decorative_obj_704: -6761588067067929180
       decorative_obj_707: 2276958198415229721
+      decorative_obj_704: -6761588067067929180
       decorative_obj_366: 4537129684648547900
       decorative_obj_109: 1266563824604436486
       decorative_obj_559: 626364368418448112
@@ -23273,8 +23273,8 @@ TextureImporter:
       decorative_obj_423: 5235613645376096634
       decorative_obj_495: -7584041525578351546
       decorative_obj_248: -1111616316610954812
-      decorative_obj_593: -6731769135460826020
       decorative_obj_895: -641222580349691899
+      decorative_obj_593: -6731769135460826020
       decorative_obj_445: -172113439509351660
       decorative_obj_288: 3524062953638559837
       decorative_obj_308: -4834755209649307025
@@ -23439,10 +23439,10 @@ TextureImporter:
       decorative_obj_851: 8689874825289775946
       decorative_obj_38: -4923966078614319072
       decorative_obj_22: -486363160235436888
-      decorative_obj_160: 4462330401584196618
       decorative_obj_393: 5945307295344129080
-      decorative_obj_558: 3662708832585379026
       decorative_obj_783: 2728901805174715688
+      decorative_obj_558: 3662708832585379026
+      decorative_obj_160: 4462330401584196618
       decorative_obj_277: 2737337813109875659
       decorative_obj_535: -3285288155889028242
       decorative_obj_454: 6825189932880172095
@@ -23505,15 +23505,15 @@ TextureImporter:
       decorative_obj_389: -621782345348978122
       decorative_obj_422: -3618636908498997132
       decorative_obj_676: -6923206547418898576
+      decorative_obj_428: 209233228447270047
       decorative_obj_622: 6533407707911453846
       decorative_obj_46: 3583028469730760330
-      decorative_obj_344: 5771897181113806606
-      decorative_obj_231: -1470353584259271367
-      decorative_obj_428: 209233228447270047
-      decorative_obj_323: -5937316354390304042
-      decorative_obj_914: 7437351262958728165
       decorative_obj_856: 3156513934980931833
+      decorative_obj_231: -1470353584259271367
       decorative_obj_435: 3771869456329517458
+      decorative_obj_344: 5771897181113806606
+      decorative_obj_914: 7437351262958728165
+      decorative_obj_323: -5937316354390304042
       decorative_obj_291: -4653069547953953771
       decorative_obj_502: -6666609124359846589
       decorative_obj_383: -252770809774439150
@@ -23550,8 +23550,8 @@ TextureImporter:
       decorative_obj_374: -8035741466261481017
       decorative_obj_35: 2428965722533684332
       decorative_obj_64: 4260641125029794782
-      decorative_obj_654: 6567059307333472531
       decorative_obj_938: -5271501963131167485
+      decorative_obj_654: 6567059307333472531
       decorative_obj_752: 3743089716239213790
       decorative_obj_845: 6147658295307382820
       decorative_obj_885: 6785724797602641051
@@ -23566,14 +23566,14 @@ TextureImporter:
       decorative_obj_819: 6305204530511562315
       decorative_obj_846: -412586076867423200
       decorative_obj_47: -5204613770323763900
-      decorative_obj_101: 5783580885154205974
       decorative_obj_494: 5361343407872909401
       decorative_obj_401: -8769654421026766156
-      decorative_obj_134: 758267138811792570
-      decorative_obj_703: -5331390380925054661
       decorative_obj_554: 4896731293505942291
+      decorative_obj_134: 758267138811792570
+      decorative_obj_101: 5783580885154205974
       decorative_obj_338: -6765633508299259335
       decorative_obj_48: 6387908368365309411
+      decorative_obj_703: -5331390380925054661
       decorative_obj_104: -6231371317409633789
       decorative_obj_768: 4494981221060174629
       decorative_obj_929: -3486274035877594212
@@ -23587,8 +23587,8 @@ TextureImporter:
       decorative_obj_829: -750230917319979411
       decorative_obj_115: -8069451490240703383
       decorative_obj_15: -6011190912784093691
-      decorative_obj_363: 2133524100263646265
       decorative_obj_376: -8915212054961293972
+      decorative_obj_363: 2133524100263646265
       decorative_obj_0: -2023767916532506085
       decorative_obj_830: -4799931111941617928
       decorative_obj_228: -7568922037673357181
@@ -23631,12 +23631,12 @@ TextureImporter:
       decorative_obj_711: -5391632068819997445
       decorative_obj_44: 8939810223182809965
       decorative_obj_430: 5001812597815815272
-      decorative_obj_670: 5820891606356872333
       decorative_obj_886: 7188897352441618718
-      decorative_obj_701: 2215815493934631838
+      decorative_obj_670: 5820891606356872333
       decorative_obj_102: -8746320619914817595
       decorative_obj_276: -1299439257455024447
       decorative_obj_842: -83655200611623522
+      decorative_obj_701: 2215815493934631838
       decorative_obj_96: -4530025139685661882
       decorative_obj_671: 7525373605084398117
       decorative_obj_216: 6458665883197229431

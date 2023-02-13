@@ -81,8 +81,8 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
-    aniso: 16
+    filterMode: 0
+    aniso: 0
     mipBias: 0
     wrapU: 1
     wrapV: 1
@@ -511,7 +511,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      objects_11: 21300022
+      objects_7: 21300014
       objects_1: 21300002
       objects_9: 21300018
       objects_3: 21300006
@@ -526,7 +526,7 @@ TextureImporter:
       objects_12: 21300024
       objects_4: 21300008
       objects_6: 21300012
-      objects_7: 21300014
+      objects_11: 21300022
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

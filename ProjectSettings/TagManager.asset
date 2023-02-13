@@ -3,17 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Platform
-  - Spike
-  - Wall
-  - MeleeAttack
-  - Destruct
-  - SpawnTrigger
-  - HPplus
-  - WorldManager
-  - ButtonManager
-  - CharacterPicture
+  tags: []
   layers:
   - Default
   - TransparentFX
@@ -21,17 +11,17 @@ TagManager:
   - 
   - Water
   - UI
-  - Player
-  - Wall
-  - Platform
-  - Spike
-  - CameraHitBox
-  - SpawnTrigger
-  - Dzone
-  - BackGround
-  - PlayerHit
-  - Destructible
-  - DonSkip
+  - 
+  - 
+  - Block
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
