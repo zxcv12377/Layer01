@@ -101,7 +101,7 @@ public class WallState : MonoBehaviour
 
     private void TakeHit()
     {
-        currentHP -= CC.Damage;
+        //currentHP -= CC.Damage;
         if(currentHP <= 0 && !isDestroyed)
         {
             isDestroyed = true;

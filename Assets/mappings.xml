@@ -1,20 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ColorMappings>
-  <element color="#C07C46FF" tile="" ruletile="Assets/05.TileMap/Level1RuleTile.asset" />
-  <element color="#A6A6A6FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_35.asset" ruletile="" />
-  <element color="#888888FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_36.asset" ruletile="" />
-  <element color="#8C8C8CFF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_37.asset" ruletile="" />
-  <element color="#878787FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_38.asset" ruletile="" />
-  <element color="#878787FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_74.asset" ruletile="" />
-  <element color="#767676FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_75.asset" ruletile="" />
-  <element color="#A6A6A4FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_76.asset" ruletile="" />
-  <element color="#A6A6A3FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_77.asset" ruletile="" />
-  <element color="#A6A6A2FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_104.asset" ruletile="" />
-  <element color="#A6A6A1FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_105.asset" ruletile="" />
-  <element color="#A6A6A5FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_106.asset" ruletile="" />
-  <element color="#A6A6A7FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_107.asset" ruletile="" />
-  <element color="#A6A6A8FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_129.asset" ruletile="" />
-  <element color="#A6A6A9FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_130.asset" ruletile="" />
-  <element color="#A6A6B0FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_131.asset" ruletile="" />
-  <element color="#A6A6B1FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_132.asset" ruletile="" />
+  <element color="#C07C46FF" tile="" ruletile="Assets/05.TileMap/Level1RuleTile.asset" ornament="" enemydata="" />
+  <element color="#A6A6A6FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_35.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#888888FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_36.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#8C8C8CFF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_37.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#878787FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_38.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#878787FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_74.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#767676FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_75.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A4FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_76.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A3FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_77.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A2FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_104.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A1FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_105.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A5FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_106.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A7FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_107.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A8FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_129.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6A9FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_130.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6B0FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_131.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#A6A6B1FF" tile="Assets/Resources/MapData/Spike/Tile/mainlevbuild_132.asset" ruletile="" ornament="" enemydata="" />
+  <element color="#FF0000FF" tile="" ruletile="" ornament="" enemydata="Assets/08.Wall Data/01.Dirt Wall.asset" />
+  <element color="#FF0001FF" tile="" ruletile="" ornament="" enemydata="Assets/08.Wall Data/02.Wood Wall.asset" />
+  <element color="#FF0002FF" tile="" ruletile="" ornament="" enemydata="Assets/08.Wall Data/03.Rock Wall.asset" />
+  <element color="#78470FFF" tile="" ruletile="" ornament="Assets/Cainos/Pixel Art Platformer - Village Props/Prefab/PF Village Props - Crate Small.prefab" enemydata="" />
 </ColorMappings>

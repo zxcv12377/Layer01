@@ -1,13 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using UnityEngine.Tilemaps;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEditor;
-using TMPro;
-public class TestScript : ScriptableObject
+
+[CreateAssetMenu(menuName = "Player Data With Dash")]
+public class PlayerDataWithDash : ScriptableObject
 {
 	[Header("Gravity")]
 	[HideInInspector] public float gravityStrength; //Downwards force (gravity) needed for the desired jumpHeight and jumpTimeToApex.
@@ -40,7 +36,7 @@ public class TestScript : ScriptableObject
 	[Header("Jump")]
 	public float jumpHeight; //Height of the player's jump
 	public float jumpTimeToApex; //Time between applying the jump force and reaching the desired jump height. These values also control the player's gravity and jump force.
-	[HideInInspector] public float jumpForce; //The actual force applied (upwards) to the player when they jump.
+	[HideInInspector] public float jumpForce = 23.333f; //The actual force applied (upwards) to the player when they jump.
 
 	[Header("Both Jumps")]
 	public float jumpCutGravityMult; //Multiplier to increase gravity if the player releases thje jump button while still jumping
@@ -50,12 +46,12 @@ public class TestScript : ScriptableObject
 	public float jumpHangAccelerationMult;
 	public float jumpHangMaxSpeedMult;
 
-	[Header("Wall Jump")]
-	public Vector2 wallJumpForce; //The actual force (this time set by us) applied to the player when wall jumping.
-	[Space(5)]
-	[Range(0f, 1f)] public float wallJumpRunLerp; //Reduces the effect of player's movement while wall jumping.
-	[Range(0f, 1.5f)] public float wallJumpTime; //Time after wall jumping the player's movement is slowed for.
-	public bool doTurnOnWallJump; //Player will rotate to face wall jumping direction
+	//[Header("Wall Jump")]
+	//public Vector2 wallJumpForce; //The actual force (this time set by us) applied to the player when wall jumping.
+	//[Space(5)]
+	//[Range(0f, 1f)] public float wallJumpRunLerp; //Reduces the effect of player's movement while wall jumping.
+	//[Range(0f, 1.5f)] public float wallJumpTime; //Time after wall jumping the player's movement is slowed for.
+	//public bool doTurnOnWallJump; //Player will rotate to face wall jumping direction
 
 	[Space(20)]
 
@@ -107,5 +103,3 @@ public class TestScript : ScriptableObject
 		#endregion
 	}
 }
-
-

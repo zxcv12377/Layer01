@@ -3,17 +3,25 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Spike
+  - ButtonManager
+  - Platform
+  - SpawnTrigger
+  - WorldManager
+  - Wall
+  - Destruct
+  - MeleeAttack
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
   - Block
+  - Player
+  - Enemy
   - 
   - 
   - 

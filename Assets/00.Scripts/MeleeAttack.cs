@@ -16,13 +16,16 @@ public class MeleeAttack : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CC.isAttack)
-        {
-            col.enabled = true;
-        }
-        else
-        {
-            col.enabled = false;
-        }
+        //if (CC.isAttack)
+        //{
+        //    col.enabled = true;
+        //}
+        //else
+        //{
+        //    col.enabled = false;
+        //}
+        //col.enabled = CC.isAttack;
     }
+
+    
 }

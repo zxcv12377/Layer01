@@ -10,7 +10,7 @@ public class WallSpawn : MonoBehaviour
 {
     public WallType type;
 
-    [SerializeField] private WallData wallData;
+    public WallData wallData;
     [SerializeField] private GameObject wallPrefab;
 
     private void OnTriggerEnter2D(Collider2D collision)
