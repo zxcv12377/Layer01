@@ -16,6 +16,7 @@ public class SkyCirculation : MonoBehaviour
     {
         StartPos = camPos.transform.position;
         newPos = Mathf.Repeat(Time.time * speed, PosValue);
-        transform.position = StartPos + Vector2.right * newPos;
+        //transform.position = StartPos + Vector2.right * newPos;
+        transform.position = new Vector3(StartPos.x + newPos, StartPos.y, transform.position.z);
     }
 }

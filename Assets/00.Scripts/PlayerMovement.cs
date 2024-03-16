@@ -6,49 +6,50 @@ public class PlayerMovement : MonoBehaviour
 {
 	//Scriptable object which holds all the player's movement parameters. If you don't want to use it
 	//just paste in all the parameters, though you will need to manuly change all references in this script
-	public PlayerDataWithDash Data;
+	public PlayerDataWithDash Data; //Scriptable Object(플레이어의 파라미터)를 가진 데이터
 
 	#region COMPONENTS
 	public Rigidbody2D RB { get; private set; }
+	public PlayerAnimator animHandler { get; private set; }
 	#endregion
 
 	#region STATE PARAMETERS
 	//Variables control the various actions the player can perform at any time.
 	//These are fields which can are public allowing for other sctipts to read them
 	//but can only be privately written to.
-	public bool IsFacingRight { get; private set; }
-	public bool IsJumping { get; private set; }
+	public bool IsFacingRight { get; private set; } // 캐릭터의 좌우를 지정하는 변수
+	public bool IsJumping { get; private set; } // 캐릭터가 점프중인지 확인하는 변수
 	//public bool IsWallJumping { get; private set; }
-	public bool IsDashing { get; private set; }
-	public bool IsSliding { get; private set; }
+	public bool IsDashing { get; private set; } // 대시중인지 확인하는 변수
+	public bool IsSliding { get; private set; } // 슬라이드 중인지 확인하는 변수
 
 	//Timers (also all fields, could be private and a method returning a bool could be used)
-	public float LastOnGroundTime { get; private set; }
+	public float LastOnGroundTime { get; private set; } // 캐릭터가 지면에서 얼마나 떨어져 있는지 알려주는 변수
 	//public float LastOnWallTime { get; private set; }
 	//public float LastOnWallRightTime { get; private set; }
 	//public float LastOnWallLeftTime { get; private set; }
 
 	//Jump
-	private bool _isJumpCut;
-	private bool _isJumpFalling;
+	private bool _isJumpCut; // 점프컷 중인지 확인하는 변수 (점프컷이란 키가 입력된 시간에따라 점프의 높이를 조절할수 있는 것)
+	private bool _isJumpFalling; // 캐릭터가 점프 후 낙하하는 것을 확인하는 변수
 
 	////Wall Jump
 	//private float _wallJumpStartTime;
 	//private int _lastWallJumpDir;
 
 	//Dash
-	private int _dashesLeft;
-	private bool _dashRefilling;
-	private Vector2 _lastDashDir;
-	private bool _isDashAttacking;
+	private int _dashesLeft; //
+	private bool _dashRefilling; // 대쉬의 쿨타임
+	private Vector2 _lastDashDir; // 대쉬 방향
+	private bool _isDashAttacking; // 대쉬 어택중인지 확인하는 변수
 
 	#endregion
 
 	#region INPUT PARAMETERS
-	private Vector2 _moveInput;
+	private Vector2 _moveInput; // 입력된 움직임은 저장하는 변수
 
-	public float LastPressedJumpTime { get; private set; }
-	public float LastPressedDashTime { get; private set; }
+	public float LastPressedJumpTime { get; private set; } //연속적인 점프를 못하게 막기 위한 변수
+	public float LastPressedDashTime { get; private set; } //연속적인 대쉬를 못하게 막기 위한 변수
 	#endregion
 
 	#region CHECK PARAMETERS
@@ -56,7 +57,7 @@ public class PlayerMovement : MonoBehaviour
 	[Header("Checks")]
 	[SerializeField] private Transform _groundCheckPoint;
 	//Size of groundCheck depends on the size of your character generally you want them slightly small than width (for ground) and height (for the wall check)
-	[SerializeField] private Vector2 _groundCheckSize = new Vector2(0.49f, 0.03f);
+	[SerializeField] private Vector2 _groundCheckSize = new Vector2(1f, 0.15f);//(0.49f, 0.03f);
 	//[Space(5)]
 	//[SerializeField] private Transform _frontWallCheckPoint;
 	//[SerializeField] private Transform _backWallCheckPoint;
@@ -71,16 +72,20 @@ public class PlayerMovement : MonoBehaviour
 	private void Awake()
 	{
 		RB = GetComponent<Rigidbody2D>();
+		animHandler = GetComponent<PlayerAnimator>();
+
 	}
 
 	private void Start()
 	{
-		SetGravityScale(Data.gravityScale);
-		IsFacingRight = true;
+		SetGravityScale(Data.gravityScale); // GravityScale을 초기화
+		IsFacingRight = true; // 캐릭터의 앞부분을 오른쪽으로
 	}
 
 	private void Update()
 	{
+		//Debug.Log(RB.velocity.y);
+		Debug.Log(LastOnGroundTime);
 		#region TIMERS
 		LastOnGroundTime -= Time.deltaTime;
 		//LastOnWallTime -= Time.deltaTime;
@@ -94,173 +99,36 @@ public class PlayerMovement : MonoBehaviour
 		#region INPUT HANDLER
 		_moveInput.x = Input.GetAxisRaw("Horizontal");
 		_moveInput.y = Input.GetAxisRaw("Vertical");
+		animHandler.isMove = _moveInput.x != 0 ? true : false; // x축의 입력이 있을경우 달리는 모션을 취할수 있게 함.
 
 		if (_moveInput.x != 0)
 			CheckDirectionToFace(_moveInput.x > 0);
 
-		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.C) || Input.GetKeyDown(KeyCode.J))
+		if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.C))
 		{
 			OnJumpInput();
 		}
 
-		if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.C) || Input.GetKeyUp(KeyCode.J))
+		if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.C))
 		{
 			OnJumpUpInput();
 		}
 
-		if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.K))
+		if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.LeftShift))
 		{
 			OnDashInput();
 		}
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+
+        }
 		#endregion
 
-		#region COLLISION CHECKS
-		if (!IsDashing && !IsJumping)
-		{
-			//Ground Check
-			if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) && !IsJumping) //checks if set box overlaps with ground
-			{
-				LastOnGroundTime = Data.coyoteTime; //if so sets the lastGrounded to coyoteTime
-			}
-
-			////Right Wall Check
-			//if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
-			//		|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
-			//	LastOnWallRightTime = Data.coyoteTime;
-
-			////Right Wall Check
-			//if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)
-			//	|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)) && !IsWallJumping)
-			//	LastOnWallLeftTime = Data.coyoteTime;
-
-			////Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
-			//LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
-		}
-		#endregion
-
-		#region JUMP CHECKS
-		if (IsJumping && RB.velocity.y < 0)
-		{
-			IsJumping = false;
-
-			//if (!IsWallJumping)
-				_isJumpFalling = true;
-		}
-
-		//if (IsWallJumping && Time.time - _wallJumpStartTime > Data.wallJumpTime)
-		//{
-		//	IsWallJumping = false;
-		//}
-
-		if (LastOnGroundTime > 0 && !IsJumping /*&& !IsWallJumping*/)
-		{
-			_isJumpCut = false;
-
-			if (!IsJumping)
-				_isJumpFalling = false;
-		}
-
-		if (!IsDashing)
-		{
-			//Jump
-			if (CanJump() && LastPressedJumpTime > 0)
-			{
-				IsJumping = true;
-				//IsWallJumping = false;
-				_isJumpCut = false;
-				_isJumpFalling = false;
-				Jump();
-			}
-			//WALL JUMP
-			//else if (/*CanWallJump() && */LastPressedJumpTime > 0)
-			//{
-			//	IsWallJumping = true;
-			//	IsJumping = false;
-			//	_isJumpCut = false;
-			//	_isJumpFalling = false;
-
-			//	_wallJumpStartTime = Time.time;
-			//	_lastWallJumpDir = (LastOnWallRightTime > 0) ? -1 : 1;
-
-			//	WallJump(_lastWallJumpDir);
-			//}
-		}
-		#endregion
-
-		#region DASH CHECKS
-		if (CanDash() && LastPressedDashTime > 0)
-		{
-			//Freeze game for split second. Adds juiciness and a bit of forgiveness over directional input
-			Sleep(Data.dashSleepTime);
-
-			//If not direction pressed, dash forward
-			if (_moveInput != Vector2.zero)
-				_lastDashDir = _moveInput;
-			else
-				_lastDashDir = IsFacingRight ? Vector2.right : Vector2.left;
-
-
-
-			IsDashing = true;
-			IsJumping = false;
-			//IsWallJumping = false;
-			_isJumpCut = false;
-
-			StartCoroutine(nameof(StartDash), _lastDashDir);
-		}
-		#endregion
-
-		#region SLIDE CHECKS
-		if (CanSlide() && ((/*LastOnWallLeftTime > 0 && */_moveInput.x < 0) || (/*LastOnWallRightTime > 0 && */_moveInput.x > 0)))
-			IsSliding = true;
-		else
-			IsSliding = false;
-		#endregion
-
-		#region GRAVITY
-		if (!_isDashAttacking)
-		{
-			//Higher gravity if we've released the jump input or are falling
-			if (IsSliding)
-			{
-				SetGravityScale(0);
-			}
-			else if (RB.velocity.y < 0 && _moveInput.y < 0)
-			{
-				//Much higher gravity if holding down
-				SetGravityScale(Data.gravityScale * Data.fastFallGravityMult);
-				//Caps maximum fall speed, so when falling over large distances we don't accelerate to insanely high speeds
-				RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxFastFallSpeed));
-			}
-			else if (_isJumpCut)
-			{
-				//Higher gravity if jump button released
-				SetGravityScale(Data.gravityScale * Data.jumpCutGravityMult);
-				RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxFallSpeed));
-			}
-			else if ((IsJumping /*|| IsWallJumping*/ || _isJumpFalling) && Mathf.Abs(RB.velocity.y) < Data.jumpHangTimeThreshold)
-			{
-				SetGravityScale(Data.gravityScale * Data.jumpHangGravityMult);
-			}
-			else if (RB.velocity.y < 0)
-			{
-				//Higher gravity if falling
-				SetGravityScale(Data.gravityScale * Data.fallGravityMult);
-				//Caps maximum fall speed, so when falling over large distances we don't accelerate to insanely high speeds
-				RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxFallSpeed));
-			}
-			else
-			{
-				//Default gravity if standing on a platform or moving upwards
-				SetGravityScale(Data.gravityScale);
-			}
-		}
-		else
-		{
-			//No gravity when dashing (returns to normal once initial dashAttack phase over)
-			SetGravityScale(0);
-		}
-		#endregion
+		CollisionCheck();
+		JumpCheck();
+		DashCheck();
+		//SlideCheck();
+		Gravity();
 	}
 
 	private void FixedUpdate()
@@ -282,6 +150,179 @@ public class PlayerMovement : MonoBehaviour
 		if (IsSliding)
 			Slide();
 	}
+
+	#region COLLISION CHECKS
+	public void CollisionCheck()
+    {
+		if (!IsDashing && !IsJumping)
+		{
+			//Ground Check
+			if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) && !IsJumping) // 지면을 밟고 있는지 체크
+			{
+                if (LastOnGroundTime < 0)
+                {
+					animHandler.justLanded = true;
+				}
+				LastOnGroundTime = Data.coyoteTime; //CoyoteTime이란 캐릭터가 낙하를 시작할 때 점프를 하지 않은 상태에서 일정 시간에 도달하기 전에 점프를 할 수 있게 하는 것
+			}
+			// 추후 추가될 수 있는 상태이기 때문에 주석처리만 한 상태
+			////Right Wall Check
+			//if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
+			//		|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
+			//	LastOnWallRightTime = Data.coyoteTime;
+
+			////Right Wall Check
+			//if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)
+			//	|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)) && !IsWallJumping)
+			//	LastOnWallLeftTime = Data.coyoteTime;
+
+			////Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
+			//LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
+		}
+	}
+	#endregion
+
+	#region JUMP CHECKS
+	public void JumpCheck()
+    {
+		// 점프 후 낙하중
+		if (IsJumping && RB.velocity.y < 0)
+		{
+			IsJumping = false;
+			animHandler.isJump = IsJumping;
+			//if (!IsWallJumping)
+			_isJumpFalling = true;
+		}
+
+		//if (IsWallJumping && Time.time - _wallJumpStartTime > Data.wallJumpTime)
+		//{
+		//	IsWallJumping = false;
+		//}
+
+		// 점프중이 아닐때 낙하중
+		if (LastOnGroundTime > 0 && !IsJumping /*&& !IsWallJumping*/)
+		{
+			_isJumpCut = false;
+
+			if (!IsJumping)
+				_isJumpFalling = false;
+		}
+
+		if (!IsDashing)
+		{
+			//Jump
+			if (CanJump() && LastPressedJumpTime > 0)
+			{
+				IsJumping = true;
+				//IsWallJumping = false;
+				_isJumpCut = false;
+				_isJumpFalling = false;
+				animHandler.isJump = true;
+				Jump();
+
+				animHandler.startedJumping = true;
+			}
+			//WALL JUMP
+			//else if (/*CanWallJump() && */LastPressedJumpTime > 0)
+			//{
+			//	IsWallJumping = true;
+			//	IsJumping = false;
+			//	_isJumpCut = false;
+			//	_isJumpFalling = false;
+
+			//	_wallJumpStartTime = Time.time;
+			//	_lastWallJumpDir = (LastOnWallRightTime > 0) ? -1 : 1;
+
+			//	WallJump(_lastWallJumpDir);
+			//}
+		}
+	}
+	#endregion
+
+	#region DASH CHECKS
+	public void DashCheck()
+    {
+		if (CanDash() && LastPressedDashTime > 0)
+		{
+			//Freeze game for split second. Adds juiciness and a bit of forgiveness over directional input
+			Sleep(Data.dashSleepTime);
+
+			//If not direction pressed, dash forward
+			if (_moveInput != Vector2.zero)
+				_lastDashDir = _moveInput;
+			else
+				_lastDashDir = IsFacingRight ? Vector2.right : Vector2.left; // 대쉬의 방향 지정
+
+
+
+			IsDashing = true;
+			IsJumping = false;
+			//IsWallJumping = false;
+			_isJumpCut = false;
+
+			StartCoroutine(nameof(StartDash), _lastDashDir);
+		}
+	}
+	#endregion
+
+	#region SLIDE CHECKS
+	//public void SlideCheck()
+	//   {
+	//       if (CanSlide() && ((/*LastOnWallLeftTime > 0 && */_moveInput.x < 0) || (/*LastOnWallRightTime > 0 && */_moveInput.x > 0)))
+	//           IsSliding = true;
+	//       else
+	//           IsSliding = false;
+	//   }
+	#endregion
+
+	#region GRAVITY
+	public void Gravity()
+    {
+		if (!_isDashAttacking)
+		{
+			//Higher gravity if we've released the jump input or are falling
+			if (IsSliding)
+			{
+				SetGravityScale(0);
+			}
+			else if (RB.velocity.y < 0 && _moveInput.y < 0)
+			{
+				// 아래방향으로 입력이 있다면 더욱 강한 중력을 적용함.
+				SetGravityScale(Data.gravityScale * Data.fastFallGravityMult);
+				// 중력을 최대속도이상으로 가지 못하게 함.
+				RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxFastFallSpeed));
+			}
+			else if (_isJumpCut)
+			{
+				// 점프 입력 버튼을 때면 더 강한 중력을 적용함.	
+				SetGravityScale(Data.gravityScale * Data.jumpCutGravityMult);
+				RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxFallSpeed));
+			}
+			else if ((IsJumping /*|| IsWallJumping*/ || _isJumpFalling) && Mathf.Abs(RB.velocity.y) < Data.jumpHangTimeThreshold)
+			{
+				// 수직낙하때보다 약한 중력을 주어서 공중에서 조금더 자유롭게 움직일 수 있게 함.
+				SetGravityScale(Data.gravityScale * Data.jumpHangGravityMult);
+			}
+			else if (RB.velocity.y < 0)
+			{
+				//Higher gravity if falling
+				SetGravityScale(Data.gravityScale * Data.fallGravityMult);
+				//Caps maximum fall speed, so when falling over large distances we don't accelerate to insanely high speeds
+				RB.velocity = new Vector2(RB.velocity.x, Mathf.Max(RB.velocity.y, -Data.maxFallSpeed));
+			}
+			else
+			{
+				//Default gravity if standing on a platform or moving upwards
+				SetGravityScale(Data.gravityScale);
+			}
+		}
+		else
+		{
+			//No gravity when dashing (returns to normal once initial dashAttack phase over)
+			SetGravityScale(0);
+		}
+	}
+	#endregion
 
 	#region INPUT CALLBACKS
 	//Methods which whandle input detected in Update()
@@ -310,14 +351,14 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Sleep(float duration)
 	{
-		//Method used so we don't need to call StartCoroutine everywhere
-		//nameof() notation means we don't need to input a string directly.
-		//Removes chance of spelling mistakes and will improve error messages if any
+		// StartCoroutine을 항상 사용할 필요가 없음.
+		// nameof() 는 문자열에 의존하여 사용하지 않기 위함.
+		// 삭제 되거나 변경되어도 에러 메세지를 출력하기 때문에 대응하기도 좋음.
 		StartCoroutine(nameof(PerformSleep), duration);
 	}
 
 	private IEnumerator PerformSleep(float duration)
-	{
+	{	// 대쉬를 하기전 DashSleepTime으로 지정해준 시간만큼 시간을 잠시 멈추는 기능
 		Time.timeScale = 0;
 		yield return new WaitForSecondsRealtime(duration); //Must be Realtime since timeScale with be 0 
 		Time.timeScale = 1;
@@ -330,7 +371,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		//Calculate the direction we want to move in and our desired velocity
 		float targetSpeed = _moveInput.x * Data.runMaxSpeed;
-		//We can reduce are control using Lerp() this smooths changes to are direction and speed
+		// 방향 전환과 속도를 부드럽게 하기 위해서 Mathf.Lerp()함수를 이용함.
 		targetSpeed = Mathf.Lerp(RB.velocity.x, targetSpeed, lerpAmount);
 
 		#region Calculate AccelRate
@@ -340,12 +381,12 @@ public class PlayerMovement : MonoBehaviour
 		//or trying to decelerate (stop). As well as applying a multiplier if we're air borne.
 		if (LastOnGroundTime > 0)
 			accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? Data.runAccelAmount : Data.runDeccelAmount;
-		else
+		else // 공중에서의 가감속을 설정해줌.
 			accelRate = (Mathf.Abs(targetSpeed) > 0.01f) ? Data.runAccelAmount * Data.accelInAir : Data.runDeccelAmount * Data.deccelInAir;
 		#endregion
 
 		#region Add Bonus Jump Apex Acceleration
-		//Increase are acceleration and maxSpeed when at the apex of their jump, makes the jump feel a bit more bouncy, responsive and natural
+		// 점프를 조금더 자연스럽게 만들어 주기 위해서 정점에서 최대 속도가 지정된 만큼(jumpHangAccelerationMult, jumpHangMaxSpeedMult) 증가함.
 		if ((IsJumping /*|| IsWallJumping*/ || _isJumpFalling) && Mathf.Abs(RB.velocity.y) < Data.jumpHangTimeThreshold)
 		{
 			accelRate *= Data.jumpHangAccelerationMult;
@@ -357,11 +398,12 @@ public class PlayerMovement : MonoBehaviour
 		//We won't slow the player down if they are moving in their desired direction but at a greater speed than their maxSpeed
 		if (Data.doConserveMomentum && Mathf.Abs(RB.velocity.x) > Mathf.Abs(targetSpeed) && Mathf.Sign(RB.velocity.x) == Mathf.Sign(targetSpeed) && Mathf.Abs(targetSpeed) > 0.01f && LastOnGroundTime < 0)
 		{
-			//Prevent any deceleration from happening, or in other words conserve are current momentum
+			//최대 속도를 넘어가지 않도록 운동량을 보존함.
 			//You could experiment with allowing for the player to slightly increae their speed whilst in this "state"
 			accelRate = 0;
 		}
 		#endregion
+
 
 		//Calculate difference between current velocity and desired velocity
 		float speedDif = targetSpeed - RB.velocity.x;
@@ -369,7 +411,7 @@ public class PlayerMovement : MonoBehaviour
 
 		float movement = speedDif * accelRate;
 
-		//Convert this to a vector and apply to rigidbody
+		//Rigidbody에 적용하고 벡터로 변환
 		RB.AddForce(movement * Vector2.right, ForceMode2D.Force);
 
 		/*
@@ -381,7 +423,7 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Turn()
 	{
-		//stores scale and flips the player along the x axis, 
+		//스케일을 조정하여 캐릭터의 좌우 방향을 지정함. 스케일을 사용하는 이유는 flip을 쓰면 자식 오브젝트들은 함께 움직이지 않기 때문에 번거로워지기 때문.
 		Vector3 scale = transform.localScale;
 		scale.x *= -1;
 		transform.localScale = scale;
@@ -402,10 +444,10 @@ public class PlayerMovement : MonoBehaviour
 		//This means we'll always feel like we jump the same amount 
 		//(setting the player's Y velocity to 0 beforehand will likely work the same, but I find this more elegant :D)
 		float force = Data.jumpForce;
-		if (RB.velocity.y < 0)
-			force -= RB.velocity.y;
+        if (RB.velocity.y < 0) // 어째서 사용했는지 잘 이해가 안됨... coyoteTime 점프를 했을때 높게 점프를 하기 위함?
+            force -= RB.velocity.y;
 
-		RB.AddForce(Vector2.up * force, ForceMode2D.Impulse);
+        RB.AddForce(Vector2.up * force, ForceMode2D.Impulse);
 		#endregion
 	}
 
@@ -467,6 +509,7 @@ public class PlayerMovement : MonoBehaviour
 		//Begins the "end" of our dash where we return some control to the player but still limit run acceleration (see Update() and Run())
 		SetGravityScale(Data.gravityScale);
 		RB.velocity = Data.dashEndSpeed * dir.normalized;
+		animHandler.startedDash = true;
 
 		while (Time.time - startTime <= Data.dashEndTime)
 		{
@@ -489,9 +532,9 @@ public class PlayerMovement : MonoBehaviour
 	#endregion
 
 	#region OTHER MOVEMENT METHODS
-	private void Slide()
+	private void Slide() // 크게 체감이 되지 않는 부분으로 조금더 공부가 필요할 듯함.
 	{
-		//Works the same as the Run but only in the y-axis
+		//Run()함수와 같지만 Y축으로만 작용함
 		//THis seems to work fine, buit maybe you'll find a better way to implement a slide into this system
 		float speedDif = Data.slideSpeed - RB.velocity.y;
 		float movement = speedDif * Data.slideAccel;
