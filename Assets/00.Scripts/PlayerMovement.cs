@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
 	private void Update()
 	{
 		//Debug.Log(RB.velocity.y);
-		Debug.Log(LastOnGroundTime);
+		//Debug.Log(LastOnGroundTime);
 		#region TIMERS
 		LastOnGroundTime -= Time.deltaTime;
 		//LastOnWallTime -= Time.deltaTime;
@@ -159,11 +159,11 @@ public class PlayerMovement : MonoBehaviour
 			//Ground Check
 			if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) && !IsJumping) // 지면을 밟고 있는지 체크
 			{
-                if (LastOnGroundTime < 0)
+                if (LastOnGroundTime < 0.1f)
                 {
-					animHandler.justLanded = true;
-				}
-				LastOnGroundTime = Data.coyoteTime; //CoyoteTime이란 캐릭터가 낙하를 시작할 때 점프를 하지 않은 상태에서 일정 시간에 도달하기 전에 점프를 할 수 있게 하는 것
+                    animHandler.justLanded = true;
+                }
+                LastOnGroundTime = Data.coyoteTime; //CoyoteTime이란 캐릭터가 낙하를 시작할 때 점프를 하지 않은 상태에서 일정 시간에 도달하기 전에 점프를 할 수 있게 하는 것
 			}
 			// 추후 추가될 수 있는 상태이기 때문에 주석처리만 한 상태
 			////Right Wall Check
