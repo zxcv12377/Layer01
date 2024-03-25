@@ -12,6 +12,9 @@ public class PlayerAnimator : MonoBehaviour
     public bool startedJumping { private get; set; }
     public bool justLanded { private get; set; }
     public bool startedDash { private get; set; }
+    public bool isGround { private get; set; }
+    public bool isWallSlide { private get; set; }
+    public bool isWallJump { private get; set; }
 
     public bool isJump { private get; set; }
     // Start is called before the first frame update
@@ -48,8 +51,11 @@ public class PlayerAnimator : MonoBehaviour
             startedDash = false;
             return;
         }
+        anim.SetBool("isWallJump", isWallJump);
+        anim.SetBool("isWallSlide", isWallSlide);
         anim.SetBool("isMove", isMove);
         anim.SetBool("isJump", isJump);
+        anim.SetBool("isGround", isGround);
         anim.SetFloat("yVelocity", mov.RB.velocity.y);
     }
 }

@@ -19,26 +19,26 @@ public class PlayerMovement : MonoBehaviour
 	//but can only be privately written to.
 	public bool IsFacingRight { get; private set; } // 캐릭터의 좌우를 지정하는 변수
 	public bool IsJumping { get; private set; } // 캐릭터가 점프중인지 확인하는 변수
-	//public bool IsWallJumping { get; private set; }
+	public bool IsWallJumping { get; private set; }
 	public bool IsDashing { get; private set; } // 대시중인지 확인하는 변수
 	public bool IsSliding { get; private set; } // 슬라이드 중인지 확인하는 변수
 
 	//Timers (also all fields, could be private and a method returning a bool could be used)
 	public float LastOnGroundTime { get; private set; } // 캐릭터가 지면에서 얼마나 떨어져 있는지 알려주는 변수
-	//public float LastOnWallTime { get; private set; }
-	//public float LastOnWallRightTime { get; private set; }
-	//public float LastOnWallLeftTime { get; private set; }
+    public float LastOnWallTime { get; private set; }
+    public float LastOnWallRightTime { get; private set; }
+    public float LastOnWallLeftTime { get; private set; }
 
-	//Jump
-	private bool _isJumpCut; // 점프컷 중인지 확인하는 변수 (점프컷이란 키가 입력된 시간에따라 점프의 높이를 조절할수 있는 것)
+    //Jump
+    private bool _isJumpCut; // 점프컷 중인지 확인하는 변수 (점프컷이란 키가 입력된 시간에따라 점프의 높이를 조절할수 있는 것)
 	private bool _isJumpFalling; // 캐릭터가 점프 후 낙하하는 것을 확인하는 변수
 
-	////Wall Jump
-	//private float _wallJumpStartTime;
-	//private int _lastWallJumpDir;
+    //Wall Jump
+    private float _wallJumpStartTime;
+    private int _lastWallJumpDir;
 
-	//Dash
-	private int _dashesLeft; //
+    //Dash
+    private int _dashesLeft; //
 	private bool _dashRefilling; // 대쉬의 쿨타임
 	private Vector2 _lastDashDir; // 대쉬 방향
 	private bool _isDashAttacking; // 대쉬 어택중인지 확인하는 변수
@@ -58,14 +58,14 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private Transform _groundCheckPoint;
 	//Size of groundCheck depends on the size of your character generally you want them slightly small than width (for ground) and height (for the wall check)
 	[SerializeField] private Vector2 _groundCheckSize = new Vector2(1f, 0.15f);//(0.49f, 0.03f);
-	//[Space(5)]
-	//[SerializeField] private Transform _frontWallCheckPoint;
-	//[SerializeField] private Transform _backWallCheckPoint;
-	//[SerializeField] private Vector2 _wallCheckSize = new Vector2(0.5f, 1f);
-	#endregion
+    [Space(5)]
+    [SerializeField] private Transform _frontWallCheckPoint;
+    [SerializeField] private Transform _backWallCheckPoint;
+    [SerializeField] private Vector2 _wallCheckSize = new Vector2(0.5f, 1f);
+    #endregion
 
-	#region LAYERS & TAGS
-	[Header("Layers & Tags")]
+    #region LAYERS & TAGS
+    [Header("Layers & Tags")]
 	[SerializeField] private LayerMask _groundLayer;
 	#endregion
 
@@ -88,11 +88,11 @@ public class PlayerMovement : MonoBehaviour
 		//Debug.Log(LastOnGroundTime);
 		#region TIMERS
 		LastOnGroundTime -= Time.deltaTime;
-		//LastOnWallTime -= Time.deltaTime;
-		//LastOnWallRightTime -= Time.deltaTime;
-		//LastOnWallLeftTime -= Time.deltaTime;
+        LastOnWallTime -= Time.deltaTime;
+        LastOnWallRightTime -= Time.deltaTime;
+        LastOnWallLeftTime -= Time.deltaTime;
 
-		LastPressedJumpTime -= Time.deltaTime;
+        LastPressedJumpTime -= Time.deltaTime;
 		LastPressedDashTime -= Time.deltaTime;
 		#endregion
 
@@ -136,10 +136,10 @@ public class PlayerMovement : MonoBehaviour
 		//Handle Run
 		if (!IsDashing)
 		{
-			//if (IsWallJumping)
-			//	Run(Data.wallJumpRunLerp);
-			//else
-				Run(1);
+            if (IsWallJumping)
+                Run(Data.wallJumpRunLerp);
+            else
+                Run(1);
 		}
 		else if (_isDashAttacking)
 		{
@@ -163,22 +163,60 @@ public class PlayerMovement : MonoBehaviour
                 {
                     animHandler.justLanded = true;
                 }
+				animHandler.isWallJump = false;
+				animHandler.isGround = true;
                 LastOnGroundTime = Data.coyoteTime; //CoyoteTime이란 캐릭터가 낙하를 시작할 때 점프를 하지 않은 상태에서 일정 시간에 도달하기 전에 점프를 할 수 있게 하는 것
 			}
-			// 추후 추가될 수 있는 상태이기 때문에 주석처리만 한 상태
-			////Right Wall Check
-			//if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
-			//		|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
-			//	LastOnWallRightTime = Data.coyoteTime;
+            else
+            {
+				animHandler.isGround = false;
+			}
+            #region WALL CHECK COMMENT
+            // 추후 추가될 수 있는 상태이기 때문에 주석처리만 한 상태
+            //if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
+            //     || (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
+            //{
+            //    animHandler.isWallSlide = true;
+            //    LastOnWallRightTime = Data.coyoteTime;
+            //}
+            //else
+            //{
+            //    animHandler.isWallSlide = false;
+            //}
+            ////Back Wall Check
+            //if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)
+            //    || (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)) && !IsWallJumping)
+            //{
+            //    animHandler.isWallSlide = true;
+            //    LastOnWallLeftTime = Data.coyoteTime;
+            //}
+            //else
+            //{
+            //    animHandler.isWallSlide = false;
+            //}
+            #endregion
+            //Front Wall Check
+            if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
+                 || (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
+            {
+				animHandler.isWallSlide = true;
+				LastOnWallRightTime = Data.coyoteTime;
+			}
+            //Back Wall Check
+            else if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)
+                || (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)) && !IsWallJumping)
+            {
+				animHandler.isWallSlide = true;
+				LastOnWallLeftTime = Data.coyoteTime;
+			}
+            else
+            {
+				animHandler.isWallSlide = false;
+			}
 
-			////Right Wall Check
-			//if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)
-			//	|| (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)) && !IsWallJumping)
-			//	LastOnWallLeftTime = Data.coyoteTime;
-
-			////Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
-			//LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
-		}
+            //Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
+            LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
+        }
 	}
 	#endregion
 
@@ -190,17 +228,16 @@ public class PlayerMovement : MonoBehaviour
 		{
 			IsJumping = false;
 			animHandler.isJump = IsJumping;
-			//if (!IsWallJumping)
-			_isJumpFalling = true;
+			if (!IsWallJumping) _isJumpFalling = true;
 		}
 
-		//if (IsWallJumping && Time.time - _wallJumpStartTime > Data.wallJumpTime)
-		//{
-		//	IsWallJumping = false;
-		//}
+        if (IsWallJumping && Time.time - _wallJumpStartTime > Data.wallJumpTime)
+        {
+            IsWallJumping = false;
+        }
 
-		// 점프중이 아닐때 낙하중
-		if (LastOnGroundTime > 0 && !IsJumping /*&& !IsWallJumping*/)
+        // 점프중이 아닐때 낙하중
+        if (LastOnGroundTime > 0 && !IsJumping /*&& !IsWallJumping*/)
 		{
 			_isJumpCut = false;
 
@@ -214,7 +251,7 @@ public class PlayerMovement : MonoBehaviour
 			if (CanJump() && LastPressedJumpTime > 0)
 			{
 				IsJumping = true;
-				//IsWallJumping = false;
+				IsWallJumping = false;
 				_isJumpCut = false;
 				_isJumpFalling = false;
 				animHandler.isJump = true;
@@ -222,20 +259,20 @@ public class PlayerMovement : MonoBehaviour
 
 				animHandler.startedJumping = true;
 			}
-			//WALL JUMP
-			//else if (/*CanWallJump() && */LastPressedJumpTime > 0)
-			//{
-			//	IsWallJumping = true;
-			//	IsJumping = false;
-			//	_isJumpCut = false;
-			//	_isJumpFalling = false;
+            //WALL JUMP
+            else if (CanWallJump() && LastPressedJumpTime > 0)
+            {
+                IsWallJumping = true;
+                IsJumping = false;
+                _isJumpCut = false;
+                _isJumpFalling = false;
 
-			//	_wallJumpStartTime = Time.time;
-			//	_lastWallJumpDir = (LastOnWallRightTime > 0) ? -1 : 1;
+                _wallJumpStartTime = Time.time;
+                _lastWallJumpDir = (LastOnWallRightTime > 0) ? -1 : 1;
 
-			//	WallJump(_lastWallJumpDir);
-			//}
-		}
+                WallJump(_lastWallJumpDir);
+            }
+        }
 	}
 	#endregion
 
@@ -257,7 +294,7 @@ public class PlayerMovement : MonoBehaviour
 
 			IsDashing = true;
 			IsJumping = false;
-			//IsWallJumping = false;
+			IsWallJumping = false;
 			_isJumpCut = false;
 
 			StartCoroutine(nameof(StartDash), _lastDashDir);
@@ -333,7 +370,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public void OnJumpUpInput()
 	{
-		if (CanJumpCut() /*|| CanWallJumpCut()*/)
+		if (CanJumpCut() || CanWallJumpCut())
 			_isJumpCut = true;
 	}
 
@@ -387,7 +424,7 @@ public class PlayerMovement : MonoBehaviour
 
 		#region Add Bonus Jump Apex Acceleration
 		// 점프를 조금더 자연스럽게 만들어 주기 위해서 정점에서 최대 속도가 지정된 만큼(jumpHangAccelerationMult, jumpHangMaxSpeedMult) 증가함.
-		if ((IsJumping /*|| IsWallJumping*/ || _isJumpFalling) && Mathf.Abs(RB.velocity.y) < Data.jumpHangTimeThreshold)
+		if ((IsJumping || IsWallJumping || _isJumpFalling) && Mathf.Abs(RB.velocity.y) < Data.jumpHangTimeThreshold)
 		{
 			accelRate *= Data.jumpHangAccelerationMult;
 			targetSpeed *= Data.jumpHangMaxSpeedMult;
@@ -451,34 +488,35 @@ public class PlayerMovement : MonoBehaviour
 		#endregion
 	}
 
-	//private void WallJump(int dir)
-	//{
-	//	//Ensures we can't call Wall Jump multiple times from one press
-	//	LastPressedJumpTime = 0;
-	//	LastOnGroundTime = 0;
-	//	LastOnWallRightTime = 0;
-	//	LastOnWallLeftTime = 0;
+    private void WallJump(int dir)
+    {
+        //Ensures we can't call Wall Jump multiple times from one press
+        LastPressedJumpTime = 0;
+        LastOnGroundTime = 0;
+        LastOnWallRightTime = 0;
+        LastOnWallLeftTime = 0;
 
-	//	#region Perform Wall Jump
-	//	Vector2 force = new Vector2(Data.wallJumpForce.x, Data.wallJumpForce.y);
-	//	force.x *= dir; //apply force in opposite direction of wall
+        #region Perform Wall Jump
+        Vector2 force = new Vector2(Data.wallJumpForce.x, Data.wallJumpForce.y);
+        force.x *= dir; //apply force in opposite direction of wall
 
-	//	if (Mathf.Sign(RB.velocity.x) != Mathf.Sign(force.x))
-	//		force.x -= RB.velocity.x;
+        if (Mathf.Sign(RB.velocity.x) != Mathf.Sign(force.x))
+            force.x -= RB.velocity.x;
 
-	//	if (RB.velocity.y < 0) //checks whether player is falling, if so we subtract the velocity.y (counteracting force of gravity). This ensures the player always reaches our desired jump force or greater
-	//		force.y -= RB.velocity.y;
+        if (RB.velocity.y < 0) //checks whether player is falling, if so we subtract the velocity.y (counteracting force of gravity). This ensures the player always reaches our desired jump force or greater
+            force.y -= RB.velocity.y;
 
-	//	//Unlike in the run we want to use the Impulse mode.
-	//	//The default mode will apply are force instantly ignoring masss
-	//	RB.AddForce(force, ForceMode2D.Impulse);
-	//	#endregion
-	//}
-	#endregion
+		//Unlike in the run we want to use the Impulse mode.
+		//The default mode will apply are force instantly ignoring masss
+		animHandler.isWallJump = true;
+        RB.AddForce(force, ForceMode2D.Impulse);
+        #endregion
+    }
+    #endregion
 
-	#region DASH METHODS
-	//Dash Coroutine
-	private IEnumerator StartDash(Vector2 dir)
+    #region DASH METHODS
+    //Dash Coroutine
+    private IEnumerator StartDash(Vector2 dir)
 	{
 		//Overall this method of dashing aims to mimic Celeste, if you're looking for
 		// a more physics-based approach try a method similar to that used in the jump
@@ -492,7 +530,7 @@ public class PlayerMovement : MonoBehaviour
 		_isDashAttacking = true;
 
 		SetGravityScale(0);
-
+		animHandler.startedDash = true;
 		//We keep the player's velocity at the dash speed during the "attack" phase (in celeste the first 0.15s)
 		while (Time.time - startTime <= Data.dashAttackTime)
 		{
@@ -509,7 +547,7 @@ public class PlayerMovement : MonoBehaviour
 		//Begins the "end" of our dash where we return some control to the player but still limit run acceleration (see Update() and Run())
 		SetGravityScale(Data.gravityScale);
 		RB.velocity = Data.dashEndSpeed * dir.normalized;
-		animHandler.startedDash = true;
+		
 
 		while (Time.time - startTime <= Data.dashEndTime)
 		{
@@ -559,23 +597,23 @@ public class PlayerMovement : MonoBehaviour
 		return LastOnGroundTime > 0 && !IsJumping;
 	}
 
-	//private bool CanWallJump()
-	//{
-	//	return LastPressedJumpTime > 0 && LastOnWallTime > 0 && LastOnGroundTime <= 0 && (!IsWallJumping ||
-	//		 (LastOnWallRightTime > 0 && _lastWallJumpDir == 1) || (LastOnWallLeftTime > 0 && _lastWallJumpDir == -1));
-	//}
+    private bool CanWallJump()
+    {
+        return LastPressedJumpTime > 0 && LastOnWallTime > 0 && LastOnGroundTime <= 0 && (!IsWallJumping ||
+             (LastOnWallRightTime > 0 && _lastWallJumpDir == 1) || (LastOnWallLeftTime > 0 && _lastWallJumpDir == -1));
+    }
 
-	private bool CanJumpCut()
+    private bool CanJumpCut()
 	{
 		return IsJumping && RB.velocity.y > 0;
 	}
 
-	//private bool CanWallJumpCut()
-	//{
-	//	return IsWallJumping && RB.velocity.y > 0;
-	//}
+    private bool CanWallJumpCut()
+    {
+        return IsWallJumping && RB.velocity.y > 0;
+    }
 
-	private bool CanDash()
+    private bool CanDash()
 	{
 		if (!IsDashing && _dashesLeft < Data.dashAmount && LastOnGroundTime > 0 && !_dashRefilling)
 		{
@@ -587,7 +625,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public bool CanSlide()
 	{
-		if (/*LastOnWallTime > 0 && */!IsJumping /*&& !IsWallJumping*/ && !IsDashing && LastOnGroundTime <= 0)
+		if (LastOnWallTime > 0 && !IsJumping && !IsWallJumping && !IsDashing && LastOnGroundTime <= 0)
 			return true;
 		else
 			return false;
@@ -601,8 +639,8 @@ public class PlayerMovement : MonoBehaviour
 		Gizmos.color = Color.green;
 		Gizmos.DrawWireCube(_groundCheckPoint.position, _groundCheckSize);
 		Gizmos.color = Color.blue;
-		//Gizmos.DrawWireCube(_frontWallCheckPoint.position, _wallCheckSize);
-		//Gizmos.DrawWireCube(_backWallCheckPoint.position, _wallCheckSize);
+		Gizmos.DrawWireCube(_frontWallCheckPoint.position, _wallCheckSize);
+		Gizmos.DrawWireCube(_backWallCheckPoint.position, _wallCheckSize);
 	}
 	#endregion
 
