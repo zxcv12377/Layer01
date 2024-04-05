@@ -67,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
     #region LAYERS & TAGS
     [Header("Layers & Tags")]
 	[SerializeField] private LayerMask _groundLayer;
+	[SerializeField] private LayerMask _oneWayLayer;
 	#endregion
 
 	private void Awake()
@@ -157,7 +158,8 @@ public class PlayerMovement : MonoBehaviour
 		if (!IsDashing && !IsJumping)
 		{
 			//Ground Check
-			if (Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) && !IsJumping) // 지면을 밟고 있는지 체크
+			if ((Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) 
+				|| Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _oneWayLayer)) && !IsJumping) // 지면을 밟고 있는지 체크
 			{
                 if (LastOnGroundTime < 0.1f)
                 {
@@ -553,7 +555,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			yield return null;
 		}
-
+		
 		//Dash over
 		IsDashing = false;
 	}
@@ -582,11 +584,17 @@ public class PlayerMovement : MonoBehaviour
 
 		RB.AddForce(movement * Vector2.up);
 	}
-	#endregion
+    #endregion
 
+    #region ITEM METHODS
+	public void ItemApple()
+    {
+		_dashesLeft = 1;
+    }
+    #endregion
 
-	#region CHECK METHODS
-	public void CheckDirectionToFace(bool isMovingRight)
+    #region CHECK METHODS
+    public void CheckDirectionToFace(bool isMovingRight)
 	{
 		if (isMovingRight != IsFacingRight)
 			Turn();

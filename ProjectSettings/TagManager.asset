@@ -12,6 +12,8 @@ TagManager:
   - Wall
   - Destruct
   - MeleeAttack
+  - OneWayPlatform
+  - MovingGround
   layers:
   - Default
   - TransparentFX
@@ -23,7 +25,7 @@ TagManager:
   - Player
   - Enemy
   - Wall
-  - 
+  - OneWayGround
   - 
   - 
   - 
