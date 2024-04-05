@@ -8,38 +8,20 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-public enum ItemType
-{
-    Key,
-    Apple
-}
-
 public class TestScript : MonoBehaviour
 {
-    private PlayerMovement player;
-    public ItemType itemtype;
-    private void OnTriggerEnter2D(Collider2D collision)
+    private Vector3 pos;
+    private Vector3 origin;
+    public float speed = 1.0f;
+    private void Start()
     {
-        switch (itemtype)
-        {
-            case ItemType.Apple:
-                    if (collision.gameObject.CompareTag("Player"))
-                {
-                    player = collision.gameObject.GetComponent<PlayerMovement>();
-                    player.ItemApple();
-                    StartCoroutine(ObjectActive());
-                }
-                break;
-            case ItemType.Key:
-                break;
-        }
+        origin = transform.position;
+        pos = new Vector3(transform.position.x, transform.position.y - 0.2f, transform.position.z);
     }
-
-    private IEnumerator ObjectActive()
+    private void Update()
     {
-        gameObject.SetActive(false);
-        yield return new WaitForSeconds(5.0f);
-        gameObject.SetActive(true);
+        transform.position = Vector3.Lerp(origin, pos, Mathf.PingPong(Time.time * speed, 1.0f));
+        transform.localScale = new Vector3(Mathf.Clamp(transform.localScale.x, -3f, 3f), transform.localScale.y, transform.localScale.z);
     }
 }
 
