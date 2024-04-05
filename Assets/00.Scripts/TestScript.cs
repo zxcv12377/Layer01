@@ -20,14 +20,18 @@ public class TestScript : MonoBehaviour
     public ItemType itemtype;
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(ItemType.Apple == itemtype)
+        switch (itemtype)
         {
-            if (collision.gameObject.CompareTag("Player"))
-            {
-                player = collision.gameObject.GetComponent<PlayerMovement>();
-                player.ItemApple();
-                StartCoroutine(ObjectActive());
-            }
+            case ItemType.Apple:
+                    if (collision.gameObject.CompareTag("Player"))
+                {
+                    player = collision.gameObject.GetComponent<PlayerMovement>();
+                    player.ItemApple();
+                    StartCoroutine(ObjectActive());
+                }
+                break;
+            case ItemType.Key:
+                break;
         }
     }
 
