@@ -1,14 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using UnityEngine.Tilemaps;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using UnityEditor;
-using TMPro;
 
-public class TestScript : MonoBehaviour
+public class ItemMovement : MonoBehaviour
 {
     private Vector3 pos;
     private Vector3 origin;
@@ -25,5 +19,3 @@ public class TestScript : MonoBehaviour
         transform.Rotate(new Vector3(0, rotSpeed * Time.deltaTime, 0f));
     }
 }
-
-
