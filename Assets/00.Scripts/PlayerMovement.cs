@@ -173,32 +173,10 @@ public class PlayerMovement : MonoBehaviour
             {
 				animHandler.isGround = false;
 			}
-            #region WALL CHECK COMMENT
-            // 추후 추가될 수 있는 상태이기 때문에 주석처리만 한 상태
-            //if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
-            //     || (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
-            //{
-            //    animHandler.isWallSlide = true;
-            //    LastOnWallRightTime = Data.coyoteTime;
-            //}
-            //else
-            //{
-            //    animHandler.isWallSlide = false;
-            //}
-            ////Back Wall Check
-            //if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)
-            //    || (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)) && !IsWallJumping)
-            //{
-            //    animHandler.isWallSlide = true;
-            //    LastOnWallLeftTime = Data.coyoteTime;
-            //}
-            //else
-            //{
-            //    animHandler.isWallSlide = false;
-            //}
-            #endregion
-            //Front Wall Check
-            if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
+
+			#region WALL CHECK COMMENT
+			//Front Wall Check
+			if (((Physics2D.OverlapBox(_frontWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && IsFacingRight)
                  || (Physics2D.OverlapBox(_backWallCheckPoint.position, _wallCheckSize, 0, _groundLayer) && !IsFacingRight)) && !IsWallJumping)
             {
 				animHandler.isWallSlide = true;
@@ -218,7 +196,8 @@ public class PlayerMovement : MonoBehaviour
 
             //Two checks needed for both left and right walls since whenever the play turns the wall checkPoints swap sides
             LastOnWallTime = Mathf.Max(LastOnWallLeftTime, LastOnWallRightTime);
-        }
+			#endregion
+		}
 	}
 	#endregion
 
@@ -520,9 +499,6 @@ public class PlayerMovement : MonoBehaviour
     //Dash Coroutine
     private IEnumerator StartDash(Vector2 dir)
 	{
-		//Overall this method of dashing aims to mimic Celeste, if you're looking for
-		// a more physics-based approach try a method similar to that used in the jump
-
 		LastOnGroundTime = 0;
 		LastPressedDashTime = 0;
 
@@ -533,12 +509,11 @@ public class PlayerMovement : MonoBehaviour
 
 		SetGravityScale(0);
 		animHandler.startedDash = true;
-		//We keep the player's velocity at the dash speed during the "attack" phase (in celeste the first 0.15s)
+
 		while (Time.time - startTime <= Data.dashAttackTime)
 		{
 			RB.velocity = dir.normalized * Data.dashSpeed;
-			//Pauses the loop until the next frame, creating something of a Update loop. 
-			//This is a cleaner implementation opposed to multiple timers and this coroutine approach is actually what is used in Celeste :D
+			// 한 프레임을 넘기기 위해 루프를 잠시 멈춤
 			yield return null;
 		}
 
@@ -546,7 +521,7 @@ public class PlayerMovement : MonoBehaviour
 
 		_isDashAttacking = false;
 
-		//Begins the "end" of our dash where we return some control to the player but still limit run acceleration (see Update() and Run())
+		//플레이어에게 제어권을 다시 일부 반환해주고 가속을 제한함
 		SetGravityScale(Data.gravityScale);
 		RB.velocity = Data.dashEndSpeed * dir.normalized;
 		
@@ -563,7 +538,7 @@ public class PlayerMovement : MonoBehaviour
 	//Short period before the player is able to dash again
 	private IEnumerator RefillDash(int amount)
 	{
-		//SHoet cooldown, so we can't constantly dash along the ground, again this is the implementation in Celeste, feel free to change it up
+		//대시를 계속해서 사용할 수 없게 쿨다운을 줌
 		_dashRefilling = true;
 		yield return new WaitForSeconds(Data.dashRefillTime);
 		_dashRefilling = false;
