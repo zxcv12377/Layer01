@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class DeathBringerController : MonoBehaviour
 {
@@ -10,7 +9,6 @@ public class DeathBringerController : MonoBehaviour
     private Transform target;
     private Vector3 moveDirection;
 
-    private NavMeshAgent nmAgent;
     [Header("Check")]
     [SerializeField] private Transform _groundCheckPoint;
     [SerializeField] private Vector2 _groundCheckSize;
@@ -35,8 +33,6 @@ public class DeathBringerController : MonoBehaviour
     [Header("Layer")]
     [SerializeField] private LayerMask _layerMask;
 
-
-
     #region ENUM
     enum State
     {
@@ -57,6 +53,8 @@ public class DeathBringerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+
+        WeightRandomPicker();
     }
 
 
@@ -151,18 +149,25 @@ public class DeathBringerController : MonoBehaviour
     {
         var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
+        var wrPicker = new Rito.WeightedRandomPicker<string>();
+
+        wrPicker.Add(
+            ("Left", 50),
+            ("Right", 50)
+            );
+
+
         anim.Play("Teleport_before");
         yield return new WaitForSeconds(curAnimStateInfo.length);
 
         transform.position = new Vector3(-120, transform.position.y);
-        int randIndex = Random.Range(0, 2);
+        string randIndex = wrPicker.GetRandomPick();
+        Debug.Log("randIndex : " + randIndex);
         yield return new WaitForSeconds(curAnimStateInfo.length * 2f);
 
-        transform.position = (randIndex == 0) ? new Vector3(target.position.x + stoppingDistance, transform.position.y) : new Vector3(target.position.x - stoppingDistance, transform.position.y);
+        transform.position = (randIndex != "Right") ? new Vector3(target.position.x + stoppingDistance, transform.position.y) : new Vector3(target.position.x - stoppingDistance, transform.position.y);
         enabled = true;
         anim.Play("Teleport_after");
-
-
     }
     #endregion
 
@@ -274,6 +279,13 @@ public class DeathBringerController : MonoBehaviour
         }
         transform.localScale = scale;
         rb.velocity = Vector2.zero;
+    }
+    #endregion
+
+    #region WEIGHTRANDOMPICK METHOD
+    private void WeightRandomPicker()
+    {
+        
     }
     #endregion
 
