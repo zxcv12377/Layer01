@@ -14,6 +14,7 @@ TagManager:
   - MeleeAttack
   - OneWayPlatform
   - MovingGround
+  - DeathofBringer
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Enemy
   - Wall
   - OneWayGround
-  - 
+  - Boss
   - 
   - 
   - 

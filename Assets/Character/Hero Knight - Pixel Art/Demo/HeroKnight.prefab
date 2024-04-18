@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2900218875308588589}
   - component: {fileID: 827722496337519530}
   - component: {fileID: 2090642674025853698}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GroundSensor
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4872806789914819219}
   m_Layer: 7
   m_Name: LeftWallCheck
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,9 +101,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5335230620235176407}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Target
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 7958350822203910006}
   - component: {fileID: 7290526791184959912}
   - component: {fileID: 8091314785745062227}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HeroKnight
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -369,7 +369,7 @@ GameObject:
   - component: {fileID: 2409656661592572340}
   m_Layer: 7
   m_Name: RightWallCheck
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -400,9 +400,9 @@ GameObject:
   - component: {fileID: 7646082782773197330}
   - component: {fileID: 1011138383611117998}
   - component: {fileID: 2724002377843051195}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallSensor_R2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 8810322751443479689}
   m_Layer: 7
   m_Name: GroundCheck
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -492,9 +492,9 @@ GameObject:
   - component: {fileID: 3233824457707053878}
   - component: {fileID: 1306675150133841448}
   - component: {fileID: 7644162722278263769}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallSensor_L2
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -553,9 +553,9 @@ GameObject:
   - component: {fileID: 4393510860592810054}
   - component: {fileID: 3960872287899394342}
   - component: {fileID: 4862588835780617305}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallSensor_R1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -614,9 +614,9 @@ GameObject:
   - component: {fileID: 351674194244795142}
   - component: {fileID: 5359120195630597513}
   - component: {fileID: 2193030436431168656}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallSensor_L1
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -7,10 +7,12 @@ public class DeathBringerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator anim;
     private Transform target;
+    private Transform saveTarget;
     private Vector3 moveDirection;
 
-    private bool isTeleport = true;
-    private bool teleportRefill;
+    public bool isTeleport { get; private set; }
+    public bool teleportRefill { get; private set; }
+    public bool isAttack { get; private set; }
 
     [Header("Check")]
     [SerializeField] private Transform _groundCheckPoint;
@@ -53,21 +55,24 @@ public class DeathBringerController : MonoBehaviour
     State state;
     #endregion
 
-    // Start is called before the first frame update
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).transform;
+        saveTarget = target;
+
+        Initialized();
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
         
+        StartCoroutine(nameof(StateMachine));
+        
     }
 
-
-    // Update is called once per frame
     void Update()
     {
+        Debug.Log(state);
         if (target == null) return;
         SetDestination(target);
         CheckDirectionFace(moveDirection.x > 0);
@@ -107,27 +112,33 @@ public class DeathBringerController : MonoBehaviour
     }
     #endregion
 
-    //#region IDLE
-    //IEnumerator IDLE()
-    //{
-    //    // 현재 진행중인 Animator 상태 정보
-    //    var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
+    #region IDLE
+    IEnumerator IDLE()
+    {
+        // 현재 진행중인 Animator 상태 정보
+        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-    //    // 애니메이션 이름이 Idle이 아니면 Play
-    //    if (!curAnimStateInfo.IsName("Idle"))
-    //    {
-    //        anim.Play("Idle", 0, 0);
-    //    }
-    //    yield return null;
-    //}
-    //#endregion
+        // 애니메이션 이름이 Idle이 아니면 Play
+        if (!curAnimStateInfo.IsName("Idle"))
+        {
+            anim.Play("Idle", 0, 0);
+        }
+
+        yield return new WaitForSeconds(5f);
+        ChangeState(State.CHASE);
+
+    }
+    #endregion
 
     #region CHASE
     IEnumerator CHASE()
     {
         var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-        transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        if (target == null)
+        {
+            target = saveTarget;
+        }
 
         if (!curAnimStateInfo.IsName("Walk"))
         {
@@ -143,12 +154,13 @@ public class DeathBringerController : MonoBehaviour
         // 목표와의 거리가 멀어진 경우
         else if (remainingDistance > lostDistance)
         {
+            
             yield return null;
         }
         else
         {
             // 애니메이션의 한 사이클 동안 대기
-            ChangeState(State.IDLE);
+            
             yield return new WaitForSeconds(curAnimStateInfo.length);
         }
     }
@@ -157,7 +169,10 @@ public class DeathBringerController : MonoBehaviour
     #region TELEPORT
     IEnumerator Teloport()
     {
-        
+        if(target == null)
+        {
+            target = saveTarget;
+        }
         if (!isTeleport)
         {
             yield return null;
@@ -264,7 +279,9 @@ public class DeathBringerController : MonoBehaviour
             yield return new WaitForSeconds(curAnimStateInfo.length * 3f);
         }
     }
+    #endregion
 
+    #region ANIMATION STATE
     void ChangeState(State newState)
     {
         state = newState;
@@ -279,6 +296,7 @@ public class DeathBringerController : MonoBehaviour
             Vector3 direction = target.position - transform.position;
             remainingDistance = Mathf.Abs(direction.x);
             moveDirection = direction.normalized;
+            transform.position += new Vector3(moveDirection.x, 0, 0) * moveSpeed * Time.deltaTime;
         }
     }
     #endregion
@@ -314,6 +332,15 @@ public class DeathBringerController : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(_groundCheckPoint.position, _groundCheckSize);
+    }
+    #endregion
+
+    #region INITIALIZED
+    private void Initialized()
+    {
+        isTeleport = true;
+        isAttack = true;
+        state = State.IDLE; // 기본을 IDLE 상태로 지정
     }
     #endregion
 }

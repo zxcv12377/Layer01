@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ObjectPooling : MonoBehaviour
 {
-    public static ObjectPooling Instance; // 싱글톤처럼 이용하기 위해서 사용한 변수
+    public static ObjectPooling Instance; // 싱글톤을 사용
     [SerializeField] private GameObject poolingObjectPrefab;
     private Queue<GuidedMissile> poolingObejctQueue = new Queue<GuidedMissile>();
     private void Awake()
