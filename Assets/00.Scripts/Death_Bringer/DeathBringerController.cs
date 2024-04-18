@@ -9,6 +9,9 @@ public class DeathBringerController : MonoBehaviour
     private Transform target;
     private Vector3 moveDirection;
 
+    private bool isTeleport = true;
+    private bool teleportRefill;
+
     [Header("Check")]
     [SerializeField] private Transform _groundCheckPoint;
     [SerializeField] private Vector2 _groundCheckSize;
@@ -32,6 +35,10 @@ public class DeathBringerController : MonoBehaviour
     [Space(5)]
     [Header("Layer")]
     [SerializeField] private LayerMask _layerMask;
+    [Space(15)]
+    [Header("GuidedMissile")]
+    [SerializeField] private GameObject GuidedMissile;
+    [SerializeField] private Transform launcherPosition;
 
     #region ENUM
     enum State
@@ -49,12 +56,12 @@ public class DeathBringerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        target = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).transform;
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
-        WeightRandomPicker();
+        
     }
 
 
@@ -64,19 +71,22 @@ public class DeathBringerController : MonoBehaviour
         if (target == null) return;
         SetDestination(target);
         CheckDirectionFace(moveDirection.x > 0);
+
+        //StartCoroutine(nameof(Teloport));
+
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            StartCoroutine(Teloport());
+            Spell();
         }
     }
     #region CHECK
-    public void CollisionCheck()
-    {
-        if(Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, _layerMask))
-        {
-            MonsterFlip();
-        }
-    }
+    //public void CollisionCheck()
+    //{
+    //    if(Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, _layerMask))
+    //    {
+    //        MonsterFlip();
+    //    }
+    //}
 
     public void CheckDirectionFace(bool isMovingRight)
     {
@@ -113,68 +123,79 @@ public class DeathBringerController : MonoBehaviour
     //#endregion
 
     #region CHASE
-    //IEnumerator CHASE()
-    //{
-    //    var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
+    IEnumerator CHASE()
+    {
+        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-    //    transform.position += moveDirection * moveSpeed * Time.deltaTime;
+        transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
-    //    if (!curAnimStateInfo.IsName("Walk"))
-    //    {
-    //        anim.Play("Walk", 0, 0);
-    //        // SetDestination을 위해 한 프레임을 넘기기위한 코드
-    //        yield return null;
-    //    }
-    //    // 목표까지 남은 거리가 멈추는 지점보다 작거나 같으면 공격
-    //    if(remainingDistance <= stoppingDistance)
-    //    {
-    //        ChangeState(State.ATTACK);
-    //    }
-    //    // 목표와의 거리가 멀어진 경우
-    //    else if(remainingDistance > lostDistance)
-    //    {
-    //        yield return null;
-    //    }
-    //    else
-    //    {
-    //        // 애니메이션의 한 사이클 동안 대기
-    //        ChangeState(State.IDLE);
-    //        yield return new WaitForSeconds(chaseDelay);
-    //    }
-    //}
+        if (!curAnimStateInfo.IsName("Walk"))
+        {
+            anim.Play("Walk", 0, 0);
+            // SetDestination을 위해 한 프레임을 넘기기위한 코드
+            yield return null;
+        }
+        // 목표까지 남은 거리가 멈추는 지점보다 작거나 같으면 공격
+        if (remainingDistance <= stoppingDistance)
+        {
+            ChangeState(State.ATTACK);
+        }
+        // 목표와의 거리가 멀어진 경우
+        else if (remainingDistance > lostDistance)
+        {
+            yield return null;
+        }
+        else
+        {
+            // 애니메이션의 한 사이클 동안 대기
+            ChangeState(State.IDLE);
+            yield return new WaitForSeconds(curAnimStateInfo.length);
+        }
+    }
     #endregion
 
     #region TELEPORT
     IEnumerator Teloport()
     {
-        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        
+        if (!isTeleport)
+        {
+            yield return null;
+        }
+        else
+        {
+            var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
 
-        var wrPicker = new Rito.WeightedRandomPicker<string>();
+            var wrPicker = new Rito.WeightedRandomPicker<string>();
 
-        wrPicker.Add(
-            ("Left", 50),
-            ("Right", 50)
-            );
+            wrPicker.Add(
+                ("Left", 50),
+                ("Right", 50)
+                );
 
+            isTeleport = false;
+            anim.Play("Teleport_before");
+            yield return new WaitForSeconds(curAnimStateInfo.length);
 
-        anim.Play("Teleport_before");
-        yield return new WaitForSeconds(curAnimStateInfo.length);
+            transform.position = new Vector3(-120, transform.position.y);
+            string randIndex = wrPicker.GetRandomPick();
+            Debug.Log("randIndex : " + randIndex);
+            yield return new WaitForSeconds(curAnimStateInfo.length * 2f);
 
-        transform.position = new Vector3(-120, transform.position.y);
-        string randIndex = wrPicker.GetRandomPick();
-        Debug.Log("randIndex : " + randIndex);
-        yield return new WaitForSeconds(curAnimStateInfo.length * 2f);
-
-        transform.position = (randIndex != "Right") ? new Vector3(target.position.x + stoppingDistance, transform.position.y) : new Vector3(target.position.x - stoppingDistance, transform.position.y);
-        enabled = true;
-        anim.Play("Teleport_after");
+            transform.position = (randIndex != "Right") ? new Vector3(target.position.x + stoppingDistance, transform.position.y) : new Vector3(target.position.x - stoppingDistance, transform.position.y);
+            enabled = true;
+            anim.Play("Teleport_after");
+            StartCoroutine(nameof(DelayOfTeleport));
+        }
     }
     #endregion
 
     #region SPELL
     public void Spell()
     {
-        
+        anim.Play("Cast-NoEffect");
+        var missile = ObjectPooling.GetObject(target);
+        missile.transform.position = launcherPosition.position;
     }
     #endregion
 
@@ -282,12 +303,11 @@ public class DeathBringerController : MonoBehaviour
     }
     #endregion
 
-    #region WEIGHTRANDOMPICK METHOD
-    private void WeightRandomPicker()
+    IEnumerator DelayOfTeleport()
     {
-        
+        yield return new WaitForSeconds(teleportDelay);
+        isTeleport = true;
     }
-    #endregion
 
     #region EDITOR METHODS
     private void OnDrawGizmosSelected()

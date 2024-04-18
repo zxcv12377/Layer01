@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-	//Scriptable object which holds all the player's movement parameters. If you don't want to use it
-	//just paste in all the parameters, though you will need to manuly change all references in this script
 	public PlayerDataWithDash Data; //Scriptable Object(플레이어의 파라미터)를 가진 데이터
 
 	#region COMPONENTS
@@ -85,8 +83,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private void Update()
 	{
-		//Debug.Log(RB.velocity.y);
-		//Debug.Log(LastOnGroundTime);
 		#region TIMERS
 		LastOnGroundTime -= Time.deltaTime;
         LastOnWallTime -= Time.deltaTime;
@@ -564,7 +560,7 @@ public class PlayerMovement : MonoBehaviour
     #region ITEM METHODS
 	public void ItemApple()
     {
-		_dashesLeft = 1;
+		_dashesLeft += 1;
     }
     #endregion
 
