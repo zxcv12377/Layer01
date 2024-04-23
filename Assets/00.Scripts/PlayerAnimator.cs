@@ -4,10 +4,28 @@ using UnityEngine;
 
 public class PlayerAnimator : MonoBehaviour
 {
+    #region COMPONENT
     private PlayerMovement mov;
-    private Animator anim;
-    private SpriteRenderer spriteRend;
+    public Animator anim { get; private set; }
+    #endregion
 
+    #region STRING TO HASH
+    public readonly int hashJumpAnimation = Animator.StringToHash("Jump");
+    public readonly int hashLandAnimation = Animator.StringToHash("Land");
+    public readonly int hashDashAnimation = Animator.StringToHash("Dash");
+    public readonly int hashIsWallJumpAnimation = Animator.StringToHash("isWallJump");
+    public readonly int hashIsWallSlideAnimation = Animator.StringToHash("isWallSlide");
+    public readonly int hashIsMoveAnimation = Animator.StringToHash("isMove");
+    public readonly int hashIsJumpAnimation = Animator.StringToHash("isJump");
+    public readonly int hashIsGroundAnimation = Animator.StringToHash("isGround");
+    public readonly int hashyVelocityAnimation = Animator.StringToHash("yVelocity");
+    public readonly int hashCurrentHpAnimation = Animator.StringToHash("currentHp");
+    public readonly int hashIsAttackAnimation = Animator.StringToHash("isAttack");
+    public readonly int hashAttackComboAnimation = Animator.StringToHash("AttackCombo");
+    public readonly int hashAttackSpeedAnimation = Animator.StringToHash("AttackSpeed");
+    #endregion
+
+    #region PARAMETER
     public bool isMove { private get; set; }
     public bool startedJumping { private get; set; }
     public bool justLanded { private get; set; }
@@ -15,14 +33,18 @@ public class PlayerAnimator : MonoBehaviour
     public bool isGround { private get; set; }
     public bool isWallSlide { private get; set; }
     public bool isWallJump { private get; set; }
-
     public bool isJump { private get; set; }
-    // Start is called before the first frame update
+    public bool isAttack { private get; set; }
+    #endregion
+
+    public AnimatorStateInfo currentStateInfo { get; private set; }
+
     void Start()
     {
         mov = GetComponent<PlayerMovement>();
-        spriteRend = GetComponent<SpriteRenderer>();
-        anim = spriteRend.GetComponent<Animator>();
+        anim = GetComponent<Animator>();
+
+        currentStateInfo = anim.GetCurrentAnimatorStateInfo(0);
     }
     private void LateUpdate()
     {
@@ -34,28 +56,32 @@ public class PlayerAnimator : MonoBehaviour
         
         if (startedJumping)
         {
-            anim.SetTrigger("Jump");
+            anim.SetTrigger(hashJumpAnimation);
             startedJumping = false;
             return;
         }
         if (justLanded)
         {
-            anim.SetTrigger("Land");
+            anim.SetTrigger(hashLandAnimation);
             justLanded = false;
             return;
         }
 
         if (startedDash)
         {
-            anim.SetTrigger("Dash");
+            anim.SetTrigger(hashDashAnimation);
             startedDash = false;
             return;
         }
-        anim.SetBool("isWallJump", isWallJump);
-        anim.SetBool("isWallSlide", isWallSlide);
-        anim.SetBool("isMove", isMove);
-        anim.SetBool("isJump", isJump);
-        anim.SetBool("isGround", isGround);
-        anim.SetFloat("yVelocity", mov.RB.velocity.y);
+        anim.SetBool(hashIsWallJumpAnimation, isWallJump);
+        anim.SetBool(hashIsWallSlideAnimation, isWallSlide);
+        anim.SetBool(hashIsMoveAnimation, isMove);
+        anim.SetBool(hashIsJumpAnimation, isJump);
+        anim.SetBool(hashIsGroundAnimation, isGround);
+        anim.SetBool(hashIsAttackAnimation, isAttack);
+        anim.SetFloat(hashyVelocityAnimation, mov.RB.velocity.y);
+        anim.SetFloat(hashCurrentHpAnimation, mov.currentHp);
+        anim.SetFloat(hashAttackSpeedAnimation, mov.attackSpeed);
+        anim.SetInteger(hashAttackComboAnimation, mov.comboCount);
     }
 }

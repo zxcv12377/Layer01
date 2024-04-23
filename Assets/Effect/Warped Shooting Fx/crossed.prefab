@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2443091965449456619}
   - component: {fileID: 9215698606399756148}
   - component: {fileID: 8728073511502998553}
+  - component: {fileID: 4061455488413347348}
   m_Layer: 0
   m_Name: crossed
   m_TagString: Untagged
@@ -146,3 +147,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!58 &4061455488413347348
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2443091965449456618}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.13

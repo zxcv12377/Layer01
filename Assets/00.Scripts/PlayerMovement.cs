@@ -4,24 +4,28 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-	public PlayerDataWithDash Data; //Scriptable Object(플레이어의 파라미터)를 가진 데이터
+	// 할 일 comboCount가 Update문에 있기 때문에 무진장 증가 하는걸 막아야함
+	[SerializeField] private PlayerDataWithDash Data; //Scriptable Object(플레이어의 파라미터)를 가진 데이터
 
 	#region COMPONENTS
 	public Rigidbody2D RB { get; private set; }
 	public PlayerAnimator animHandler { get; private set; }
+	public BoxCollider2D col { get; private set; }
 	#endregion
 
 	#region STATE PARAMETERS
-	//Variables control the various actions the player can perform at any time.
-	//These are fields which can are public allowing for other sctipts to read them
-	//but can only be privately written to.
+	[Header("State")]
+	public float currentHp;
+	public float maxHp;
+	public float attackDamage;
+
 	public bool IsFacingRight { get; private set; } // 캐릭터의 좌우를 지정하는 변수
 	public bool IsJumping { get; private set; } // 캐릭터가 점프중인지 확인하는 변수
 	public bool IsWallJumping { get; private set; }
 	public bool IsDashing { get; private set; } // 대시중인지 확인하는 변수
 	public bool IsSliding { get; private set; } // 슬라이드 중인지 확인하는 변수
 
-	//Timers (also all fields, could be private and a method returning a bool could be used)
+	//Timers
 	public float LastOnGroundTime { get; private set; } // 캐릭터가 지면에서 얼마나 떨어져 있는지 알려주는 변수
     public float LastOnWallTime { get; private set; }
     public float LastOnWallRightTime { get; private set; }
@@ -36,10 +40,20 @@ public class PlayerMovement : MonoBehaviour
     private int _lastWallJumpDir;
 
     //Dash
-    private int _dashesLeft; //
+    private int _dashesLeft; // 대쉬의 남은시간
 	private bool _dashRefilling; // 대쉬의 쿨타임
 	private Vector2 _lastDashDir; // 대쉬 방향
 	private bool _isDashAttacking; // 대쉬 어택중인지 확인하는 변수
+
+	//Death
+	private bool _death;
+
+	//Attack
+	private Coroutine checkAttackReInputCor;
+	[HideInInspector] public int comboCount;
+	[HideInInspector] public float attackSpeed;
+	private float attackReInputTime = 1.2f;
+	
 
 	#endregion
 
@@ -48,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
 
 	public float LastPressedJumpTime { get; private set; } //연속적인 점프를 못하게 막기 위한 변수
 	public float LastPressedDashTime { get; private set; } //연속적인 대쉬를 못하게 막기 위한 변수
+	public float LastPressedAttackTime { get; private set; }
 	#endregion
 
 	#region CHECK PARAMETERS
@@ -72,13 +87,13 @@ public class PlayerMovement : MonoBehaviour
 	{
 		RB = GetComponent<Rigidbody2D>();
 		animHandler = GetComponent<PlayerAnimator>();
+		col = GetComponent<BoxCollider2D>();
 
 	}
 
 	private void Start()
 	{
-		SetGravityScale(Data.gravityScale); // GravityScale을 초기화
-		IsFacingRight = true; // 캐릭터의 앞부분을 오른쪽으로
+		Initialize(); // 기본 사항으로 초기화
 	}
 
 	private void Update()
@@ -91,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
 
         LastPressedJumpTime -= Time.deltaTime;
 		LastPressedDashTime -= Time.deltaTime;
+		LastPressedAttackTime -= Time.deltaTime;
 		#endregion
 
 		#region INPUT HANDLER
@@ -117,7 +133,8 @@ public class PlayerMovement : MonoBehaviour
 		}
         if (Input.GetKeyDown(KeyCode.X))
         {
-
+			Debug.Log(canAttack());
+			OnAttackInput();
         }
 		#endregion
 
@@ -125,7 +142,9 @@ public class PlayerMovement : MonoBehaviour
 		JumpCheck();
 		DashCheck();
 		//SlideCheck();
+		AttackCheck();
 		Gravity();
+		Death();
 	}
 
 	private void FixedUpdate()
@@ -277,20 +296,31 @@ public class PlayerMovement : MonoBehaviour
 			StartCoroutine(nameof(StartDash), _lastDashDir);
 		}
 	}
-	#endregion
+    #endregion
 
-	#region SLIDE CHECKS
-	//public void SlideCheck()
-	//   {
-	//       if (CanSlide() && ((/*LastOnWallLeftTime > 0 && */_moveInput.x < 0) || (/*LastOnWallRightTime > 0 && */_moveInput.x > 0)))
-	//           IsSliding = true;
-	//       else
-	//           IsSliding = false;
-	//   }
-	#endregion
+    #region SLIDE CHECKS
+    //public void SlideCheck()
+    //   {
+    //       if (CanSlide() && ((/*LastOnWallLeftTime > 0 && */_moveInput.x < 0) || (/*LastOnWallRightTime > 0 && */_moveInput.x > 0)))
+    //           IsSliding = true;
+    //       else
+    //           IsSliding = false;
+    //   }
+    #endregion
 
-	#region GRAVITY
-	public void Gravity()
+    #region ATTACK CHECKS
+	public void AttackCheck()
+    {
+		if(canAttack() && LastPressedAttackTime > 0)
+        {
+			Debug.Log("AttackCheck");
+			Attack();
+        }
+    }
+    #endregion
+
+    #region GRAVITY
+    public void Gravity()
     {
 		if (!_isDashAttacking)
 		{
@@ -355,6 +385,11 @@ public class PlayerMovement : MonoBehaviour
 	{
 		LastPressedDashTime = Data.dashInputBufferTime;
 	}
+
+	public void OnAttackInput()
+    {
+		LastPressedAttackTime = Data.attackInputBufferTime;
+    }
 	#endregion
 
 	#region GENERAL METHODS
@@ -458,7 +493,7 @@ public class PlayerMovement : MonoBehaviour
 		//This means we'll always feel like we jump the same amount 
 		//(setting the player's Y velocity to 0 beforehand will likely work the same, but I find this more elegant :D)
 		float force = Data.jumpForce;
-        if (RB.velocity.y < 0) // 어째서 사용했는지 잘 이해가 안됨... coyoteTime 점프를 했을때 높게 점프를 하기 위함?
+        if (RB.velocity.y < 0) // 이해는 되는데 뭐라 설명해야할지...
             force -= RB.velocity.y;
 
         RB.AddForce(Vector2.up * force, ForceMode2D.Impulse);
@@ -557,8 +592,42 @@ public class PlayerMovement : MonoBehaviour
 	}
     #endregion
 
+    //ATTACK METHDOS
+    #region ATTACK METHODS
+	public void Attack()
+    {
+		comboCount++;
+		animHandler.isAttack = true;
+		CheckAttackReInput(attackReInputTime);
+    }
+
+	public void CheckAttackReInput(float reInputTime)
+	{
+		if (checkAttackReInputCor != null)
+			StopCoroutine(CheckAttackReInputCoroutine(reInputTime));
+		StartCoroutine(CheckAttackReInputCoroutine(reInputTime));
+	}
+
+	IEnumerator CheckAttackReInputCoroutine(float reInputTime)
+    {
+		float currentTime = 0f;
+        while (true)
+        {
+			currentTime += Time.deltaTime;
+			if(currentTime >= reInputTime)
+            {
+				break;
+            }
+			yield return null;
+        }
+		comboCount = 0;
+    }
+
+    #endregion
+
+    //ITEM METHODS
     #region ITEM METHODS
-	public void ItemApple()
+    public void ItemApple()
     {
 		_dashesLeft += 1;
     }
@@ -609,6 +678,11 @@ public class PlayerMovement : MonoBehaviour
 		else
 			return false;
 	}
+
+	private bool canAttack()
+    {
+		return !IsJumping && !IsWallJumping && !IsDashing && LastOnGroundTime > 0;
+    }
 	#endregion
 
 
@@ -623,4 +697,24 @@ public class PlayerMovement : MonoBehaviour
 	}
 	#endregion
 
+	#region INITAILIZE
+	private void Initialize()
+    {
+		attackSpeed = 1f; // 공격 속도를 1로 만듦
+		SetGravityScale(Data.gravityScale); // GravityScale을 초기화
+		IsFacingRight = true; // 캐릭터의 앞부분을 오른쪽으로
+	}
+	#endregion
+
+	public void Death()
+    {
+		if(currentHp <= 0)
+        {
+			var pm = GetComponent<PlayerMovement>();
+			SetGravityScale(0);
+			animHandler.anim.Play("HeroKnight_Death");
+			col.enabled = false;
+			pm.enabled = false;
+        }
+    }
 }

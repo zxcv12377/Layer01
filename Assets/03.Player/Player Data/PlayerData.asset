@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d1aa64ec84cb0b4abaa8e3730b24f8e, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
+  attackInputBufferTime: 0.1
+  attackDamage: 0
+  attackSpeed: 0
   gravityStrength: -88.888885
   gravityScale: 2.9629629
   fallGravityMult: 2

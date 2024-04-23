@@ -5,6 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Player Data With Dash")]
 public class PlayerDataWithDash : ScriptableObject
 {
+	[Header("Attack")]
+	[Range(0f, 1)] public float attackInputBufferTime;
+	public float attackDamage;
+	public float attackSpeed;
+
 	[Header("Gravity")]
 	[HideInInspector] public float gravityStrength; //Downwards force (gravity) needed for the desired jumpHeight and jumpTimeToApex.
 	[HideInInspector] public float gravityScale; //Strength of the player's gravity as a multiplier of gravity (set in ProjectSettings/Physics2D).
