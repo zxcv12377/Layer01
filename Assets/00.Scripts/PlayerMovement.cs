@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
 	public bool IsWallJumping { get; private set; }
 	public bool IsDashing { get; private set; } // 대시중인지 확인하는 변수
 	public bool IsSliding { get; private set; } // 슬라이드 중인지 확인하는 변수
+	public bool IsAttack { get; private set; }
 
 	//Timers
 	public float LastOnGroundTime { get; private set; } // 캐릭터가 지면에서 얼마나 떨어져 있는지 알려주는 변수
@@ -133,9 +134,9 @@ public class PlayerMovement : MonoBehaviour
 		}
         if (Input.GetKeyDown(KeyCode.X))
         {
-			Debug.Log(canAttack());
 			OnAttackInput();
-        }
+			//Attack();
+		}
 		#endregion
 
 		CollisionCheck();
@@ -150,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 	private void FixedUpdate()
 	{
 		//Handle Run
-		if (!IsDashing)
+		if (!IsDashing && !IsAttack)
 		{
             if (IsWallJumping)
                 Run(Data.wallJumpRunLerp);
@@ -170,7 +171,7 @@ public class PlayerMovement : MonoBehaviour
 	#region COLLISION CHECKS
 	public void CollisionCheck()
     {
-		if (!IsDashing && !IsJumping)
+		if (!IsDashing && !IsJumping && !IsAttack)
 		{
 			//Ground Check
 			if ((Physics2D.OverlapBox(_groundCheckPoint.position, _groundCheckSize, 0, _groundLayer) 
@@ -292,6 +293,7 @@ public class PlayerMovement : MonoBehaviour
 			IsJumping = false;
 			IsWallJumping = false;
 			_isJumpCut = false;
+			IsAttack = false;
 
 			StartCoroutine(nameof(StartDash), _lastDashDir);
 		}
@@ -313,7 +315,7 @@ public class PlayerMovement : MonoBehaviour
     {
 		if(canAttack() && LastPressedAttackTime > 0)
         {
-			Debug.Log("AttackCheck");
+			
 			Attack();
         }
     }
@@ -596,7 +598,19 @@ public class PlayerMovement : MonoBehaviour
     #region ATTACK METHODS
 	public void Attack()
     {
+		if (comboCount >= 3)
+		{
+			comboCount = 0;
+		}
+		LastPressedAttackTime = 0;
+
+
+		//공격시 속도를 모두 없애고 정지한채로 실행하게 만들어줌
+		RB.velocity = Vector2.zero;
+		SetGravityScale(0);
+
 		comboCount++;
+		IsAttack = true;
 		animHandler.isAttack = true;
 		CheckAttackReInput(attackReInputTime);
     }
@@ -604,8 +618,8 @@ public class PlayerMovement : MonoBehaviour
 	public void CheckAttackReInput(float reInputTime)
 	{
 		if (checkAttackReInputCor != null)
-			StopCoroutine(CheckAttackReInputCoroutine(reInputTime));
-		StartCoroutine(CheckAttackReInputCoroutine(reInputTime));
+			StopCoroutine(checkAttackReInputCor);
+		checkAttackReInputCor = StartCoroutine(CheckAttackReInputCoroutine(reInputTime));
 	}
 
 	IEnumerator CheckAttackReInputCoroutine(float reInputTime)
@@ -621,6 +635,13 @@ public class PlayerMovement : MonoBehaviour
 			yield return null;
         }
 		comboCount = 0;
+    }
+
+	public void AttackStop()
+    {
+		//애니메이션 이벤트에서 사용 (HeroNight_Attack1, HeroNight_Attack2, HeroNight_Attack3)
+		IsAttack = false;
+		animHandler.isAttack = false;
     }
 
     #endregion
@@ -711,7 +732,7 @@ public class PlayerMovement : MonoBehaviour
 		if(currentHp <= 0)
         {
 			var pm = GetComponent<PlayerMovement>();
-			SetGravityScale(0);
+			RB.bodyType = RigidbodyType2D.Static;
 			animHandler.anim.Play("HeroKnight_Death");
 			col.enabled = false;
 			pm.enabled = false;
