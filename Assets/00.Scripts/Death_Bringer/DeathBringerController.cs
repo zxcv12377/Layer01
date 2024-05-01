@@ -15,10 +15,10 @@ public class DeathBringerController : MonoBehaviour
     #endregion
 
     #region PARAMETER
-    public bool isTeleport { get; private set; } = false;
-    public bool teleportRefill { get; private set; } = false;
-    public bool isAttack { get; private set; } = false;
-    public bool isGuidedAttack { get; private set; } = false;
+    public bool isTeleport { get; private set; }
+    public bool isAttack { get; private set; }
+    public bool isGuidedAttack { get; private set; }
+    public bool isSpell { get; private set; }
     
 
     [Header("Check")]
@@ -36,6 +36,7 @@ public class DeathBringerController : MonoBehaviour
     [Header("Attack State")]
     [SerializeField] private float teleportCooldown; // 플레이어를 향해 텔레포트를 사용하기 위한 시간
     [SerializeField] private float spellCooldown; // 일정 시간마다 범위공격을 가하기 위한 시간
+    [SerializeField] private float guidedAttackCooldown; // 일정 시간마다 범위공격을 가하기 위한 시간
     [SerializeField] private float groggyTime; // 그로기 시간
     [Space(5)]
     [Header("State")]
@@ -50,12 +51,7 @@ public class DeathBringerController : MonoBehaviour
     [SerializeField] private Transform launcherPosition;
     #endregion
 
-    List<Skill> skills = new List<Skill> // AI의 행동의 우선순위를 설정 
-    {
-        new Skill("유도공격", 11f, 1),
-        new Skill("마법공격", 13f, 2),
-        new Skill("텔레포트", 5f, 3)
-    };
+    List<Skill> skills;
 
     #region ENUM
     enum State
@@ -74,18 +70,35 @@ public class DeathBringerController : MonoBehaviour
     State state;
     #endregion
 
+    private void Awake()
+    {
+        Initialized();
+
+        skills = new List<Skill>
+        {
+            new Skill("유도공격", guidedAttackCooldown, 1),
+            new Skill("마법공격", spellCooldown, 2),
+            new Skill("텔레포트", teleportCooldown, 3)
+        };
+    }
+
     void Start()
     {
         target = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).transform;
         saveTarget = target;
 
-        Initialized();
-
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
 
         StartCoroutine(nameof(StateMachine));
-        
+
+        //List<Skill> skills = new List<Skill> // AI의 행동의 우선순위를 설정 
+        //{
+        //    new Skill("유도공격", guidedAttackCooldown, 1),
+        //    new Skill("마법공격", spellCooldown, 2),
+        //    new Skill("텔레포트", teleportCooldown, 3)
+        //};
+
     }
 
     void Update()
@@ -116,23 +129,28 @@ public class DeathBringerController : MonoBehaviour
 
         if (nextSkill != null && AnimCheck() == false)
         {
-            ExecuteSkill(nextSkill);
+            //ExecuteSkill(nextSkill);
             nextSkill.currentCooldown = nextSkill.cooldown;
         }
         #endregion
 
+        #region TEST INPUT
         //StartCoroutine(nameof(Teloport));
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            StartCoroutine(nameof(TELEPORT));
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    StartCoroutine(nameof(TELEPORT));
+        //}
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            StartCoroutine(nameof(GUIDED_ATTACK));
+            //StartCoroutine(nameof(GUIDED_ATTACK));
+            StartCoroutine(nameof(SPELL));
+
         }
+        #endregion
     }
 
+    #region SKILL STORE
     private void ExecuteSkill(Skill skill)
     {
         switch (skill.name)
@@ -155,6 +173,7 @@ public class DeathBringerController : MonoBehaviour
         }
         Debug.Log($"Executing skill : {skill.name}");
     }
+    #endregion
 
     #region CHECK
     //public void CollisionCheck()
@@ -167,7 +186,7 @@ public class DeathBringerController : MonoBehaviour
 
     public bool AnimCheck()
     {
-        if(isTeleport || isAttack || isGuidedAttack)
+        if(isTeleport || isAttack || isGuidedAttack || isSpell)
         {
             return true;
         }
@@ -202,7 +221,6 @@ public class DeathBringerController : MonoBehaviour
     {
         // 현재 진행중인 Animator 상태 정보
         var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
         if(target != null)
         {
             target = null;
@@ -329,13 +347,17 @@ public class DeathBringerController : MonoBehaviour
     {
         if (!AnimCheck())
         {
+            if (target == null) yield break;
+
             var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
-            isGuidedAttack = true;
-            anim.Play("Cast-NoEffect");
+            isSpell = true;
+            anim.Play("Cast");
             yield return new WaitForSeconds(curAnimStateInfo.length);
-            var missile = ObjectPooling.GetObject(target);
-            missile.transform.position = launcherPosition.position;
-            isGuidedAttack = false;
+
+            var missile = ObjectPooling.GetObject();
+            missile.transform.position = new Vector3(target.position.x, 2.73f, target.position.z);
+            isSpell = false;
+            ChangeState(State.IDLE);
         }
     }
     #endregion
@@ -345,13 +367,20 @@ public class DeathBringerController : MonoBehaviour
     {
         if(!AnimCheck())
         {
+            if (target == null) yield break;
+
             var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
             isGuidedAttack = true;
             anim.Play("Cast-NoEffect");
             yield return new WaitForSeconds(curAnimStateInfo.length);
-            var missile = ObjectPooling.GetObject(target);
+
+            var missile = Instantiate(GuidedMissile);
             missile.transform.position = launcherPosition.position;
+            var gMissile = missile.GetComponent<GuidedMissile>();
+            gMissile.target = saveTarget;
+            missile.SetActive(true);
             isGuidedAttack = false;
+            ChangeState(State.IDLE);
         }
     }
     #endregion
@@ -447,7 +476,7 @@ public class DeathBringerController : MonoBehaviour
     IEnumerator CooldownOfTeleport()
     {
         yield return new WaitForSeconds(teleportCooldown);
-        isTeleport = true;
+        isTeleport = false;
     }
 
     #region EDITOR METHODS
@@ -464,6 +493,7 @@ public class DeathBringerController : MonoBehaviour
         isTeleport = false;
         isAttack = false;
         isGuidedAttack = false;
+        isSpell = false;
         state = State.IDLE; // 기본을 IDLE 상태로 지정
     }
     #endregion

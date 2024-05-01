@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-	// 할 일 comboCount가 Update문에 있기 때문에 무진장 증가 하는걸 막아야함
+	// spell의 투사체를 바꿔야함
 	[SerializeField] private PlayerDataWithDash Data; //Scriptable Object(플레이어의 파라미터)를 가진 데이터
 
 	#region COMPONENTS

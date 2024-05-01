@@ -6,16 +6,17 @@ public class ObjectPooling : MonoBehaviour
 {
     public static ObjectPooling Instance; // 싱글톤을 사용
     [SerializeField] private GameObject poolingObjectPrefab;
-    private Queue<GuidedMissile> poolingObejctQueue = new Queue<GuidedMissile>();
+    private Queue<DeathHand> poolingObejctQueue = new Queue<DeathHand>();
     private void Awake()
     {
         Instance = this;
+        Initialize(1);
     }
 
-    private GuidedMissile CreateMissile()
+    private DeathHand CreateMissile()
     {
-        var newObj = Instantiate(poolingObjectPrefab, transform).GetComponent<GuidedMissile>();
-        newObj.gameObject.SetActive(true);
+        var newObj = Instantiate(poolingObjectPrefab, transform).GetComponent<DeathHand>();
+        newObj.gameObject.SetActive(false);
         return newObj;
     }
 
@@ -27,34 +28,27 @@ public class ObjectPooling : MonoBehaviour
         }
     }
 
-    public static GuidedMissile GetObject(Transform target)
+    public static DeathHand GetObject()
     {
         if (Instance.poolingObejctQueue.Count > 0) // 줄 수 있는 오브젝트가 존재할 경우
         {
             var obj = Instance.poolingObejctQueue.Dequeue();
-            if(obj.target == null)
-            {
-                obj.target = target;
-            }
             obj.transform.SetParent(null);
             obj.gameObject.SetActive(true);
-            
+            obj.InvokeDestroy();
             return obj;
         }
         else // 줄 수 있는 오브젝트가 존재하지 않을 경우
         {
             var newObj = Instance.CreateMissile();
-            if (newObj.target == null)
-            {
-                newObj.target = target;
-            }
             newObj.transform.SetParent(null);
             newObj.gameObject.SetActive(true);
+            newObj.InvokeDestroy();
             return newObj;
         }
     }
 
-    public static void ReturnObject(GuidedMissile missile)
+    public static void ReturnObject(DeathHand missile)
     {
         missile.gameObject.SetActive(false);
         missile.transform.SetParent(Instance.transform);

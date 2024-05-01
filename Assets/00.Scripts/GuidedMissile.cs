@@ -5,19 +5,20 @@ using UnityEngine;
 public class GuidedMissile : MonoBehaviour
 {
 
-    public Transform target;
-    public float speed = 2f;
-    public Vector3 moveDirection;
-    public Vector3 dir;
-    public float disappearTime = 5f;
-    public float rotSpeed = 3f;
+    [HideInInspector]public Transform target;
+    private float speed = 2f;
+    private Vector3 moveDirection;
+    private Vector3 dir;
+    private float disappearTime = 2.0f;
 
+    private void Start()
+    {
+        Invoke("DestroyMissile", disappearTime);
+    }
     private void Update()
     {
         SetDestination(target);
-        Chase();
         SetRotate();
-        Invoke("DestroyMissile", disappearTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -30,16 +31,10 @@ public class GuidedMissile : MonoBehaviour
         }
     }
 
-    public void Chase()
-    {
-        transform.position += moveDirection * speed * Time.deltaTime; // 오브젝트를 이동시키기 위해서 사용
-        transform.right = Vector3.Slerp(transform.right.normalized, moveDirection, speed * Time.deltaTime); // 오브젝트를 이동할때 급격하게 커브를 도는것을 방지하기 위해서 사용
-    }
-
     private void DestroyMissile()
     {
         target = null;
-        ObjectPooling.ReturnObject(this);
+        gameObject.SetActive(false);
     }
 
     public void SetDestination(Transform target)
@@ -49,6 +44,8 @@ public class GuidedMissile : MonoBehaviour
             Vector3 direction = target.position - transform.position;
             moveDirection = direction.normalized;
             dir = direction;
+            transform.position += moveDirection * speed * Time.deltaTime; // 오브젝트를 이동시키기 위해서 사용
+            transform.right = Vector3.Slerp(transform.right.normalized, moveDirection, speed * Time.deltaTime); // 오브젝트를 이동할때 급격하게 커브를 도는것을 방지하기 위해서 사용
         }
     }
 
