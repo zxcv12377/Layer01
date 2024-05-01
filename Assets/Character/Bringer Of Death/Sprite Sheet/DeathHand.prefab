@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 4245729738822710897}
   - component: {fileID: 4245729738822710902}
   - component: {fileID: 3719310341468320687}
+  - component: {fileID: 6002100639305289022}
   m_Layer: 0
   m_Name: DeathHand
-  m_TagString: Untagged
+  m_TagString: DeathHand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,4 +119,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b05feb49c598a484d942fbed3d468120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+--- !u!61 &6002100639305289022
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4245729738822710903}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.02, y: -0.215}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1.4, y: 0.93}
+    newSize: {x: 1.4, y: 0.93}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.21, y: 0.5}
+  m_EdgeRadius: 0

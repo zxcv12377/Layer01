@@ -6,10 +6,10 @@ public class GuidedMissile : MonoBehaviour
 {
 
     [HideInInspector]public Transform target;
-    private float speed = 2f;
+    private float speed = 3f;
     private Vector3 moveDirection;
     private Vector3 dir;
-    private float disappearTime = 2.0f;
+    private float disappearTime = 5.0f;
 
     private void Start()
     {
@@ -25,7 +25,7 @@ public class GuidedMissile : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            var playerMovement = collision.GetComponent<PlayerMovement>();
+            PlayerMovement playerMovement = collision.GetComponent<PlayerMovement>();
             playerMovement.currentHp--;
             DestroyMissile();
         }

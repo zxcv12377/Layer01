@@ -9,6 +9,7 @@ public class DeathBringerController : MonoBehaviour
     #region COMPONENT
     private Rigidbody2D rb;
     private Animator anim;
+    private BoxCollider2D col;
     [SerializeField] private Transform target;
     private Transform saveTarget;
     private Vector3 moveDirection;
@@ -89,6 +90,7 @@ public class DeathBringerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        col = GetComponent<BoxCollider2D>();
 
         StartCoroutine(nameof(StateMachine));
 
@@ -136,17 +138,17 @@ public class DeathBringerController : MonoBehaviour
 
         #region TEST INPUT
         //StartCoroutine(nameof(Teloport));
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    StartCoroutine(nameof(TELEPORT));
-        //}
-
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            //StartCoroutine(nameof(GUIDED_ATTACK));
-            StartCoroutine(nameof(SPELL));
-
+            StartCoroutine(nameof(TELEPORT));
         }
+
+        //if (Input.GetKeyDown(KeyCode.Tab))
+        //{
+        //    //StartCoroutine(nameof(GUIDED_ATTACK));
+        //    StartCoroutine(nameof(SPELL));
+
+        //}
         #endregion
     }
 
@@ -322,6 +324,7 @@ public class DeathBringerController : MonoBehaviour
                 );
 
             isTeleport = true;
+            Colenabled();
             anim.Play("Teleport_before");
             yield return new WaitForSeconds(curAnimStateInfo.length);
 
@@ -332,11 +335,11 @@ public class DeathBringerController : MonoBehaviour
 
             transform.position = (randIndex == "Right") ?
                 new Vector3(target.position.x + stoppingDistance, transform.position.y) : new Vector3(target.position.x - stoppingDistance, transform.position.y);
-            enabled = true;
             anim.Play("Teleport_after");
             target = saveTarget;
-            StartCoroutine(nameof(CooldownOfTeleport));
+            //StartCoroutine(nameof(CooldownOfTeleport));
             yield return new WaitForSeconds(curAnimStateInfo.length);
+            Colabled();
             isTeleport = false;
         }
     }
@@ -473,11 +476,25 @@ public class DeathBringerController : MonoBehaviour
     }
     #endregion
 
-    IEnumerator CooldownOfTeleport()
+    #region OTHER METHODS
+    private void Colenabled()
     {
-        yield return new WaitForSeconds(teleportCooldown);
-        isTeleport = false;
+        col.enabled = false;
+        rb.gravityScale = 0f;
     }
+
+    private void Colabled()
+    {
+        col.enabled = true;
+        rb.gravityScale = 9.8f;
+    }
+
+    #endregion
+    //IEnumerator CooldownOfTeleport()
+    //{
+    //    yield return new WaitForSeconds(teleportCooldown);
+    //    isTeleport = false;
+    //}
 
     #region EDITOR METHODS
     private void OnDrawGizmosSelected()
