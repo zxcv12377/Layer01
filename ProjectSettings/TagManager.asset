@@ -15,6 +15,7 @@ TagManager:
   - OneWayPlatform
   - MovingGround
   - DeathofBringer
+  - DeathHand
   layers:
   - Default
   - TransparentFX
