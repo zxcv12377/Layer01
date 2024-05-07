@@ -15,6 +15,8 @@ public class ItemManager : MonoBehaviour
     private Animator anim;
     public ItemType itemType;
 
+    [HideInInspector] public Transform target;
+
     [SerializeField] private GameObject particle;
 
     private void Start()
@@ -49,6 +51,8 @@ public class ItemManager : MonoBehaviour
             case ItemType.PIXIE:
                 if (collision.gameObject.CompareTag("Player"))
                 {
+                    player = collision.gameObject.GetComponent<PlayerMovement>();
+                    target = player.transform.GetChild(1);
                     GetPixie();
                 }
                 break;

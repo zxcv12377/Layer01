@@ -4,39 +4,45 @@ using UnityEngine;
 
 public class Pixie : MonoBehaviour
 {
-    [HideInInspector] public Transform target;
+    private ItemManager itemManager;
+    private Transform target;
+    private float speed = 1;
 
-    public Vector3 followPos;
-    public int followDelay;
-    public Transform parent;
-    public Queue<Vector3> parentPos;
-
-    [HideInInspector] public bool release;
+    private Queue<Vector3> targetPos;
 
     private Animator anim;
-    // °ñµå¸ÞÅ» Follow¸¸µé±â
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        targetPos = new Queue<Vector3>();
+    }
     void Start()
     {
         anim = GetComponent<Animator>();
-        
+        itemManager = GetComponent<ItemManager>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //Watch();
-        //Follow();
-    }
+        target = itemManager.target;
+        if(target != null && anim.GetCurrentAnimatorStateInfo(0).IsName("pixieflying"))
+        {
+            Follow();
+            if (!transform.parent)
+                Watch();
 
+            if (!targetPos.Contains(target.position))
+                transform.SetParent(target);
+            
+        }
+    }
 
     private void Watch()
     {
-        followPos = parent.position;
+        targetPos.Enqueue(target.position);
     }
 
     private void Follow()
     {
-        transform.position = followPos;
+        transform.position = Vector2.Lerp(transform.position, target.transform.position, Time.deltaTime * speed);
     }
 }
