@@ -5,13 +5,25 @@ using UnityEngine;
 public enum ItemType
 {
     APPLE,
-    KEY
+    KEY,
+    PIXIE
 }
 
 public class ItemManager : MonoBehaviour
 {
     private PlayerMovement player;
+    private Animator anim;
     public ItemType itemType;
+
+    [SerializeField] private GameObject particle;
+
+    private void Start()
+    {
+        if(itemType == ItemType.PIXIE)
+        {
+            anim = GetComponent<Animator>();
+        }
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         switch (itemType)
@@ -33,8 +45,28 @@ public class ItemManager : MonoBehaviour
 
                 }
                 break;
+            #region BOSS PATTERN BREAKER
+            case ItemType.PIXIE:
+                if (collision.gameObject.CompareTag("Player"))
+                {
+                    GetPixie();
+                }
+                break;
+            #endregion
         }
     }
+    #region PIXIE EVENT
+    private void GetPixie()
+    {
+        anim.SetTrigger("Get");
+    }
+
+
+    public void TwinkleParticle()
+    {
+        particle.SetActive(true);
+    }
+    #endregion
 
     #region OBJECT ACTVIE
     private IEnumerator ObjectActive()

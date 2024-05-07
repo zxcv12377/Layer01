@@ -20,6 +20,7 @@ public class DeathBringerController : MonoBehaviour
     public bool isAttack { get; private set; }
     public bool isGuidedAttack { get; private set; }
     public bool isSpell { get; private set; }
+    public bool isPattern1 { get; private set; }
     
 
     [Header("Check")]
@@ -33,6 +34,7 @@ public class DeathBringerController : MonoBehaviour
     [Space(5)]
     [Header("Delay")]
     [SerializeField] private float chaseDelay; // 플레이어를 따라다닐때 생기는 딜레이
+    [SerializeField] private float pattern1Delay; // 패턴 파훼 시간 
     [Space(5)]
     [Header("Attack State")]
     [SerializeField] private float teleportCooldown; // 플레이어를 향해 텔레포트를 사용하기 위한 시간
@@ -50,6 +52,10 @@ public class DeathBringerController : MonoBehaviour
     [Header("GuidedMissile")]
     [SerializeField] private GameObject GuidedMissile;
     [SerializeField] private Transform launcherPosition;
+    [Space(5)]
+    [Header("Pattern1")]
+    [SerializeField] private GameObject patternObj;
+
     #endregion
 
     List<Skill> skills;
@@ -137,18 +143,14 @@ public class DeathBringerController : MonoBehaviour
         #endregion
 
         #region TEST INPUT
-        //StartCoroutine(nameof(Teloport));
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
-            StartCoroutine(nameof(TELEPORT));
+            //StartCoroutine(nameof(TELEPORT));
+            //StartCoroutine(nameof(GUIDED_ATTACK));
+            //StartCoroutine(nameof(SPELL));
+            StartCoroutine(nameof(PATTERN1));
+
         }
-
-        //if (Input.GetKeyDown(KeyCode.Tab))
-        //{
-        //    //StartCoroutine(nameof(GUIDED_ATTACK));
-        //    StartCoroutine(nameof(SPELL));
-
-        //}
         #endregion
     }
 
@@ -188,7 +190,7 @@ public class DeathBringerController : MonoBehaviour
 
     public bool AnimCheck()
     {
-        if(isTeleport || isAttack || isGuidedAttack || isSpell)
+        if(isTeleport || isAttack || isGuidedAttack || isSpell || isPattern1)
         {
             return true;
         }
@@ -389,9 +391,22 @@ public class DeathBringerController : MonoBehaviour
     #endregion
 
     #region PATTERN1
-    public void PATTERN1()
+    IEnumerator PATTERN1()
     {
-        
+        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
+
+        isPattern1 = true;
+        anim.Play("PatternCastingFirst");
+        yield return new WaitForSeconds(curAnimStateInfo.length * 20f);
+        // 패턴 파훼 조건을 정하기
+        if(pattern1Delay > 0) // 파훼 성공
+        {// 패턴 파훼시 -> Groggy
+            anim.SetBool("Pattern1", false);
+        }
+        else // 파훼 실패
+        {// 패턴 파훼 실패시 -> 공격 발동
+            anim.SetBool("Pattern1", true);
+        }
     }
     #endregion
 
